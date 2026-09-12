@@ -1,0 +1,146 @@
+﻿@{
+    bool prijavljen =
+        Session["KorisnikID"] != null &&
+        Session["TipKorisnika"] != null;
+
+    bool jeAdministrator =
+        prijavljen &&
+        Convert.ToByte(Session["TipKorisnika"]) ==
+        (byte)KlasePodataka.TipKorisnika.Administrator;
+
+    bool jeZaposleni =
+        prijavljen &&
+        Convert.ToByte(Session["TipKorisnika"]) ==
+        (byte)KlasePodataka.TipKorisnika.Zaposleni;
+
+    string nazivUloge = jeAdministrator
+        ? "Administrator"
+        : jeZaposleni
+            ? "Zaposleni"
+            : "Korisnik";
+
+    string naslovStranice = ViewBag.Title == null
+        ? "Stipendije"
+        : ViewBag.Title.ToString() + " | Stipendije";
+}
+
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1" />
+
+    <title>@naslovStranice</title>
+
+    <link href="@Url.Content("~/CSS/stil.css")?v=2"
+          rel="stylesheet"
+          type="text/css" />
+</head>
+
+<body class="aplikacija">
+    
+
+    <header class="zaglavlje">
+        <a href="@Url.Action("Index", "Home")"
+           class="logo"
+           aria-label="Fakultet Stipendije — početna">
+            <img src="@Url.Content("~/Slike/pregledpodataka.png")"
+                 alt="" />
+
+            <span>
+                Fakultet
+                <span class="logo-akcenat">Stipendije</span>
+            </span>
+        </a>
+
+        <nav class="navigacija" aria-label="Glavna navigacija">
+            <a href="@Url.Action("Index", "Home")"
+               class="dugme-navigacije">
+                <img src="@Url.Content("~/Slike/pocetna.png")"
+                     alt="" />
+                Početna
+            </a>
+
+            @if (!prijavljen)
+            {
+                <a href="@Url.Action("Index", "PreliminarnaLista")"
+                   class="dugme-navigacije">
+                    Preliminarna rang-lista
+                </a>
+
+                <a href="@Url.Action("UlogujAdmin", "Nalog")"
+                   class="dugme-navigacije">
+                    <img src="@Url.Content("~/Slike/administrator.png")"
+                         alt="" />
+                    Prijava korisnika
+                </a>
+            }
+            else
+            {
+                if (jeAdministrator)
+                {
+                    <a href="@Url.Action("Index", "Admin")"
+                       class="dugme-navigacije">
+                        Administratorski panel
+                    </a>
+                }
+                else if (jeZaposleni)
+                {
+                    <a href="@Url.Action("Index", "Zaposleni")"
+                       class="dugme-navigacije">
+                        Panel zaposlenog
+                    </a>
+                }
+
+                <div class="prijavljeni-korisnik">
+                    <span class="korisnik-ime">
+                        @Session["ImeIPrezime"]
+                    </span>
+
+                    <span class="korisnik-uloga">
+                        @nazivUloge
+                    </span>
+                </div>
+
+                using (Html.BeginForm(
+                    "Izloguj",
+                    "Nalog",
+                    FormMethod.Post,
+                    new { @class = "forma-odjava" }))
+                {
+                    @Html.AntiForgeryToken()
+
+                    <button type="submit"
+                            class="dugme-navigacije dugme-odjava">
+                        Odjavi se
+                    </button>
+                }
+            }
+        </nav>
+    </header>
+
+    <main id="glavni-sadrzaj"
+          class="glavni-sadrzaj"
+          tabindex="-1">
+        @RenderBody()
+    </main>
+
+    <footer class="futer">
+        <div class="futer-naziv">
+            Komisija za dodelu stipendija
+        </div>
+
+        <div class="futer-kontakt">
+            <span>Univerzitetska 1, Zrenjanin</span>
+            <span>Tel: 023/123-456</span>
+
+            <a href="mailto:stipendije@fakultet.ac.rs">
+                stipendije@fakultet.ac.rs
+            </a>
+        </div>
+    </footer>
+
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

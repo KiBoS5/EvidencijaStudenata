@@ -1,0 +1,17 @@
+<Solution>
+  <Folder Name="/Prezentacioni sloj/">
+    <Project Path="KorisnickiInterfejsMVC/KorisnickiInterfejsMVC.csproj" Id="5f0a90ac-4657-479c-8e22-33e8de72a3ba" />
+    <Project Path="PrezentacionaLogika/PrezentacionaLogika.csproj" Id="ecab64f0-adfe-4703-934a-f32c8b9d935f" />
+  </Folder>
+  <Folder Name="/Sloj poslovne logike/">
+    <Project Path="PoslovnaLogika/PoslovnaLogika.csproj" Id="dc594c84-c2cf-4b57-b08c-672cb6d54de2" />
+  </Folder>
+  <Folder Name="/Sloj servisa/">
+    <Project Path="Servisi/Servisi.csproj" Id="8dbccf73-ea94-4d01-a8dd-2d1599ec5506" />
+  </Folder>
+  <Folder Name="/Sloj za rad sa podacima/">
+    <Project Path="DBUtils/DBUtils.csproj" Id="77d790cf-9448-435c-81c3-5e14d8fc6c02" />
+    <Project Path="KlasePodataka/KlasePodataka.csproj" Id="d092b21a-fa13-4b59-975d-74271259cbb7" />
+    <Project Path="Repozitorijumi/Repozitorijumi.csproj" Id="28178593-a5d7-4d8b-a3b3-553a80e09f7c" />
+  </Folder>
+</Solution>

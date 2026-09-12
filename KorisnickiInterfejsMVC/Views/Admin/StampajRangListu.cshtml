@@ -1,0 +1,103 @@
+@model List<KorisnickiInterfejsMVC.Models.StudentRankingVM>
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Rang lista studenata</title>
+    <link href="~/CSS/stil.css" rel="stylesheet" />
+</head>
+
+<body class="print-telo" onload="window.print()">
+
+    <div class="print-kontejner">
+
+        <div class="print-zaglavlje">
+            <div class="print-logo">
+                <img src="~/Slike/logo.png" />
+            </div>
+
+            <div class="print-info">
+                KOMISIJA ZA DODELU STIPENDIJA<br />
+                Adresa: Univerzitetska 1, Zrenjanin<br />
+                Tel: 023/123-456 | Email: stipendije@fakultet.ac.rs
+            </div>
+        </div>
+
+        <h1 class="print-naslov">
+            RANG LISTA KANDIDATA ZA STIPENDIJU
+        </h1>
+
+        @if (!string.IsNullOrWhiteSpace(ViewBag.GodinaStudija as string) || ViewBag.IsEligible != null)
+        {
+            <div class="print-sekcija">
+                <h3>Primenjeni filteri</h3>
+                <p>
+                    @if (!string.IsNullOrWhiteSpace(ViewBag.GodinaStudija as string))
+                    {
+                        <text>Godina studija: @ViewBag.GodinaStudija<br /></text>
+                    }
+                    @if (ViewBag.IsEligible != null)
+                    {
+                        <text>Podobnost: @((bool)ViewBag.IsEligible ? "Samo podobni" : "Samo nepodobni")</text>
+                    }
+                </p>
+            </div>
+        }
+
+        <div class="print-sekcija">
+            <table class="print-tabela">
+                <tr>
+                    <th>#</th>
+                    <th>Ime i prezime</th>
+                    <th>Broj indeksa</th>
+                    <th>Program</th>
+                    <th>Godina</th>
+                    <th>Prosek</th>
+                    <th>Bodovi prosek</th>
+                    <th>Bodovi primanja</th>
+                    <th>Bodovi godina</th>
+                    <th>Ukupno bodova</th>
+                    <th>Podoban</th>
+                </tr>
+
+                @{ int rang = 1; }
+                @foreach (var s in Model)
+                {
+                    <tr>
+                        <td>@rang</td>
+                        <td>@s.Ime @s.Prezime</td>
+                        <td>@s.BrojIndeksa</td>
+                        <td>@s.StudijskiProgram</td>
+                        <td>@s.GodinaStudija</td>
+                        <td>@s.Prosek</td>
+                        <td>@s.BodoviProsek</td>
+                        <td>@s.BodoviPrimanja</td>
+                        <td>@s.BodoviGodina</td>
+                        <td>@s.UkupnoBodova</td>
+                        <td>@(s.IsEligible ? "Da" : "Ne")</td>
+                    </tr>
+                    rang++;
+                }
+            </table>
+        </div>
+
+        <div class="print-sekcija">
+            <h3>Potpis komisije</h3>
+
+            <table class="print-tabela">
+                <tr>
+                    <td>Predsednik komisije:</td>
+                    <td>?lan komisije:</td>
+                </tr>
+            </table>
+        </div>
+
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,136 @@
+﻿@model KorisnickiInterfejsMVC.Models.DodajKorisnikaVM
+
+@{
+    ViewBag.Title = "Dodavanje korisnika";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="okvir">
+    <div class="desno-panel">
+
+        <div class="print-naslov">
+            Dodavanje novog korisnika
+        </div>
+
+        @if (TempData["Poruka"] != null)
+        {
+            <div class="poruka-uspeh">
+                @TempData["Poruka"]
+            </div>
+        }
+
+        @using (Html.BeginForm(
+            "DodajKorisnika",
+            "Admin",
+            FormMethod.Post,
+            new { }))
+        {
+            @Html.AntiForgeryToken()
+
+            @Html.ValidationSummary(
+                true,
+                "",
+                new { @class = "text-danger" })
+
+            <div class="forma-red">
+                @Html.LabelFor(x => x.Ime, "Ime")
+
+                @Html.TextBoxFor(x => x.Ime, new
+                {
+                    @class = "polje-unos",
+                    autocomplete = "given-name"
+                })
+
+                @Html.ValidationMessageFor(
+                    x => x.Ime,
+                    "",
+                    new { @class = "text-danger" })
+            </div>
+
+            <div class="forma-red">
+                @Html.LabelFor(x => x.Prezime, "Prezime")
+
+                @Html.TextBoxFor(x => x.Prezime, new
+                {
+                    @class = "polje-unos",
+                    autocomplete = "family-name"
+                })
+
+                @Html.ValidationMessageFor(
+                    x => x.Prezime,
+                    "",
+                    new { @class = "text-danger" })
+            </div>
+
+            <div class="forma-red">
+                @Html.LabelFor(
+                    x => x.KorisnickoIme,
+                    "Korisničko ime")
+
+                @Html.TextBoxFor(x => x.KorisnickoIme, new
+                {
+                    @class = "polje-unos",
+                    autocomplete = "off"
+                })
+
+                @Html.ValidationMessageFor(
+                    x => x.KorisnickoIme,
+                    "",
+                    new { @class = "text-danger" })
+            </div>
+
+            <div class="forma-red">
+                @Html.LabelFor(x => x.Lozinka, "Lozinka")
+
+                @Html.PasswordFor(x => x.Lozinka, new
+                {
+                    @class = "polje-unos",
+                    autocomplete = "new-password"
+                })
+
+                @Html.ValidationMessageFor(
+                    x => x.Lozinka,
+                    "",
+                    new { @class = "text-danger" })
+            </div>
+
+            <div class="forma-red">
+                @Html.LabelFor(
+                    x => x.PotvrdaLozinke,
+                    "Potvrda lozinke")
+
+                @Html.PasswordFor(x => x.PotvrdaLozinke, new
+                {
+                    @class = "polje-unos",
+                    autocomplete = "new-password"
+                })
+
+                @Html.ValidationMessageFor(
+                    x => x.PotvrdaLozinke,
+                    "",
+                    new { @class = "text-danger" })
+            </div>
+
+            <div class="forma-red">
+                @Html.LabelFor(
+                    x => x.TipKorisnika,
+                    "Tip korisnika")
+
+                @Html.EnumDropDownListFor(
+                    x => x.TipKorisnika,
+                    "Izaberite tip korisnika",
+                    new { @class = "polje-unos" })
+
+                @Html.ValidationMessageFor(
+                    x => x.TipKorisnika,
+                    "",
+                    new { @class = "text-danger" })
+            </div>
+
+            <button type="submit"
+                    class="dugme dugme-success">
+                Dodaj korisnika
+            </button>
+        }
+    </div>
+</div>

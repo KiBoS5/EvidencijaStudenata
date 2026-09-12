@@ -1,0 +1,290 @@
+﻿@model KorisnickiInterfejsMVC.Models.PreliminarnaRangListaJavniVM
+
+@{
+    ViewBag.Title = "Preliminarna rang-lista";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="okvir">
+    <div class="desno-panel javna-lista-panel">
+
+        <div class="javna-lista-zaglavlje">
+            <div>
+                <p class="javna-lista-oznaka">
+                    STUDENTSKE STIPENDIJE
+                </p>
+
+                <h1 class="javna-lista-naslov">
+                    Preliminarna rang-lista
+                </h1>
+
+                <p class="stranica-opis">
+                    Pregled objavljenih rezultata bodovanja
+                    kandidata za stipendiju.
+                </p>
+            </div>
+
+            @if (Model.ListaJeObjavljena)
+            {
+                <a href="#primedba"
+                   class="dugme">
+                    Podnesite primedbu
+                </a>
+            }
+        </div>
+
+        @if (TempData["Poruka"] != null)
+        {
+            <div class="alert alert-info" role="status">
+                @TempData["Poruka"]
+            </div>
+        }
+
+        @if (Model.ListaJeObjavljena)
+        {
+            string datumObjave = Model.Stavke[0]
+                .DatumObjave
+                .ToLocalTime()
+                .ToString("dd.MM.yyyy HH:mm");
+
+            <div class="javna-lista-info">
+                <span>
+                    Objavljeno:
+                    <strong>@datumObjave</strong>
+                </span>
+
+                <span>
+                    Broj kandidata:
+                    <strong>@Model.Stavke.Count</strong>
+                </span>
+            </div>
+
+            <div class="javna-lista-tabela"
+                 role="region"
+                 aria-label="Objavljena rang-lista kandidata"
+                 tabindex="0">
+
+                <table class="tabela">
+                    <thead>
+                        <tr>
+                            <th scope="col">Pozicija</th>
+                            <th scope="col">Ime i prezime</th>
+                            <th scope="col">Broj indeksa</th>
+                            <th scope="col">Program</th>
+                            <th scope="col">Godina</th>
+                            <th scope="col">Prosek</th>
+                            <th scope="col">Bez roditelja</th>
+                            <th scope="col">Dokumentacija</th>
+                            <th scope="col">Ukupna primanja</th>
+                            <th scope="col">Bodovi</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @foreach (var student in Model.Stavke)
+                        {
+                            <tr>
+                                <td class="rang-pozicija">
+                                    @student.Pozicija
+                                </td>
+
+                                <td>
+                                    <strong>
+                                        @student.Ime @student.Prezime
+                                    </strong>
+                                </td>
+
+                                <td>@student.BrojIndeksa</td>
+                                <td>@student.StudijskiProgram</td>
+                                <td>@student.GodinaStudija</td>
+
+                                <td class="rang-broj">
+                                    @(student.Prosek.ToString("0.00"))
+                                </td>
+
+                                <td>
+                                    @(student.BezRoditelja ? "Da" : "Ne")
+                                </td>
+
+                                <td>
+                                    @(student.DokumentacijaPrihodaDostavljena
+                                        ? "Dostavljena"
+                                        : "Nije dostavljena")
+                                </td>
+
+                                <td class="rang-broj">
+                                    @(student.UkupnaPrimanjaDomacinstva.ToString("N2"))
+                                </td>
+
+                                <td class="rang-bodovi">
+                                    @(student.UkupnoBodova.ToString("0.##"))
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            <section id="primedba"
+                     class="primedba-sekcija"
+                     aria-labelledby="naslovPrimedbe">
+
+                <div class="primedba-uvod">
+                    <h2 id="naslovPrimedbe">
+                        Podnesite primedbu
+                    </h2>
+
+                    <p>
+                        Ako smatrate da objavljeni podaci nisu
+                        ispravni, navedite razlog primedbe.
+                    </p>
+
+                    <p>
+                        Unesite svoje ime, prezime i email adresu.
+                        U komentaru navedite na kog kandidata
+                        i koje podatke se primedba odnosi.
+                    </p>
+
+                    <p class="primedba-napomena">
+                        Sva polja su obavezna.
+                    </p>
+                </div>
+
+                <div class="primedba-forma">
+                    @using (Html.BeginForm(
+                        "PodnesiPrimedbu",
+                        "PreliminarnaLista",
+                        FormMethod.Post))
+                    {
+                        @Html.AntiForgeryToken()
+
+                        @Html.ValidationSummary(
+                            true,
+                            "",
+                            new { @class = "text-danger" })
+
+                        <div class="primedba-polja">
+                            <div class="polje-grupa">
+                                @Html.LabelFor(
+                                    x => x.Primedba.Ime,
+                                    "Ime")
+
+                                @Html.TextBoxFor(
+                                    x => x.Primedba.Ime,
+                                    new
+                                    {
+                                        @class = "polje-unos",
+                                        maxlength = "100",
+                                        autocomplete = "given-name",
+                                        placeholder = "Unesite ime"
+                                    })
+
+                                @Html.ValidationMessageFor(
+                                    x => x.Primedba.Ime,
+                                    "",
+                                    new { @class = "text-danger" })
+                            </div>
+
+                            <div class="polje-grupa">
+                                @Html.LabelFor(
+                                    x => x.Primedba.Prezime,
+                                    "Prezime")
+
+                                @Html.TextBoxFor(
+                                    x => x.Primedba.Prezime,
+                                    new
+                                    {
+                                        @class = "polje-unos",
+                                        maxlength = "100",
+                                        autocomplete = "family-name",
+                                        placeholder = "Unesite prezime"
+                                    })
+
+                                @Html.ValidationMessageFor(
+                                    x => x.Primedba.Prezime,
+                                    "",
+                                    new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="polje-grupa">
+                            @Html.LabelFor(
+                                x => x.Primedba.Email,
+                                "Email adresa")
+
+                            @Html.TextBoxFor(
+                                x => x.Primedba.Email,
+                                new
+                                {
+                                    @class = "polje-unos",
+                                    type = "email",
+                                    maxlength = "255",
+                                    autocomplete = "email",
+                                    placeholder = "ime@primer.com"
+                                })
+
+                            @Html.ValidationMessageFor(
+                                x => x.Primedba.Email,
+                                "",
+                                new { @class = "text-danger" })
+                        </div>
+
+                        <div class="polje-grupa">
+                            @Html.LabelFor(
+                                x => x.Primedba.Komentar,
+                                "Komentar")
+
+                            @Html.TextAreaFor(
+                                x => x.Primedba.Komentar,
+                                new
+                                {
+                                    @class = "polje-unos",
+                                    rows = "6",
+                                    maxlength = "2000",
+                                    aria_describedby = "uputstvoKomentar",
+                                    placeholder = "Opišite razlog primedbe..."
+                                })
+
+                            <p id="uputstvoKomentar"
+                               class="primedba-pomoc">
+                                Unesite između 10 i 2000 karaktera.
+                            </p>
+
+                            @Html.ValidationMessageFor(
+                                x => x.Primedba.Komentar,
+                                "",
+                                new { @class = "text-danger" })
+                        </div>
+
+                        <div class="primedba-akcije">
+                            <button type="submit"
+                                    class="dugme dugme-success">
+                                Podnesi primedbu
+                            </button>
+                        </div>
+                    }
+                </div>
+            </section>
+        }
+        else
+        {
+            <div class="javna-lista-prazno">
+                <h2>Rezultati još nisu objavljeni</h2>
+
+                <p>
+                    Preliminarna rang-lista biće dostupna
+                    nakon što je administrator objavi.
+                </p>
+
+                <a href="@Url.Action("Index", "Home")"
+                   class="dugme">
+                    Povratak na početnu
+                </a>
+            </div>
+        }
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

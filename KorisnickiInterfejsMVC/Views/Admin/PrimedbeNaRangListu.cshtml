@@ -1,0 +1,207 @@
+﻿@model List<KorisnickiInterfejsMVC.Models.AdministratorskaPrimedbaVM>
+
+@{
+    ViewBag.Title = "Primedbe na preliminarnu rang-listu";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    int ukupno = Model != null ? Model.Count : 0;
+    int obradjene = 0;
+
+    if (Model != null)
+    {
+        foreach (var primedba in Model)
+        {
+            if (primedba.Obradjena)
+            {
+                obradjene++;
+            }
+        }
+    }
+
+    int cekajuObradu = ukupno - obradjene;
+}
+
+<div class="okvir">
+    <div class="desno-panel primedbe-panel">
+
+        <div class="primedbe-zaglavlje">
+            <div>
+                <h1>Primedbe na preliminarnu rang-listu</h1>
+
+                <p class="stranica-opis">
+                    Pregledajte pristigle primedbe i evidentirajte
+                    njihovu obradu.
+                </p>
+            </div>
+
+            <a href="@Url.Action("Index", "Admin")"
+               class="dugme dugme-cancel">
+                Nazad na panel
+            </a>
+        </div>
+
+        @if (TempData["Poruka"] != null)
+        {
+            <div class="alert alert-info" role="status">
+                @TempData["Poruka"]
+            </div>
+        }
+
+        <div class="primedbe-statistika">
+            <div class="primedbe-statistika-stavka">
+                <span>Ukupno primedbi</span>
+                <strong>@ukupno</strong>
+            </div>
+
+            <div class="primedbe-statistika-stavka primedbe-cekanje">
+                <span>Čeka obradu</span>
+                <strong>@cekajuObradu</strong>
+            </div>
+
+            <div class="primedbe-statistika-stavka primedbe-obradjene">
+                <span>Obrađene</span>
+                <strong>@obradjene</strong>
+            </div>
+        </div>
+
+        @if (ukupno > 0)
+        {
+            <div class="primedbe-tabela-omotac"
+                 role="region"
+                 aria-label="Podnete primedbe"
+                 tabindex="0">
+
+                <table class="tabela primedbe-tabela">
+                    <thead>
+                        <tr>
+                            <th scope="col">Podnosilac</th>
+                            <th scope="col">Email</th>
+                            <th scope="col">Komentar</th>
+                            <th scope="col">Datum podnošenja</th>
+                            <th scope="col">Status</th>
+                            <th scope="col">Obradio</th>
+                            <th scope="col">Datum obrade</th>
+                            <th scope="col">Akcija</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @foreach (var primedba in Model)
+                        {
+                            <tr>
+                                <td class="primedbe-ime">
+                                    @primedba.Ime @primedba.Prezime
+                                </td>
+
+                                <td class="primedbe-email">
+                                    <a href="mailto:@primedba.Email">
+                                        @primedba.Email
+                                    </a>
+                                </td>
+
+                                <td><div class="primedbe-komentar">@primedba.Komentar</div></td>
+
+                                <td class="primedbe-datum">
+                                    @(primedba.DatumPodnosenja
+                                        .ToLocalTime()
+                                        .ToString("dd.MM.yyyy HH:mm"))
+                                </td>
+
+                                <td>
+                                    @if (primedba.Obradjena)
+                                    {
+                                        <span class="badge badge-success">
+                                            Obrađena
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge badge-warning">
+                                            Čeka obradu
+                                        </span>
+                                    }
+                                </td>
+
+                                <td>
+                                    @if (primedba.ObradioKorisnikID.HasValue)
+                                    {
+                                        <div class="primedbe-ime">
+                                            @primedba.ObradioImeIPrezime
+                                        </div>
+
+                                        if (!string.IsNullOrWhiteSpace(
+                                            primedba.ObradioKorisnickoIme))
+                                        {
+                                            <small class="primedbe-korisnicko-ime">
+                                                @primedba.ObradioKorisnickoIme
+                                            </small>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <span>-</span>
+                                    }
+                                </td>
+
+                                <td class="primedbe-datum">
+                                    @(primedba.DatumObrade.HasValue
+                                        ? primedba.DatumObrade.Value
+                                            .ToLocalTime()
+                                            .ToString("dd.MM.yyyy HH:mm")
+                                        : "-")
+                                </td>
+
+                                <td>
+                                    @if (!primedba.Obradjena)
+                                    {
+                                        using (Html.BeginForm(
+                                            "OznaciPrimedbuObradjenom",
+                                            "Admin",
+                                            FormMethod.Post,
+                                            new
+                                            {
+                                                @class = "primedbe-akcija",
+                                                onsubmit =
+                                                    "return confirm('Da li želite da označite primedbu kao obrađenu?');"
+                                            }))
+                                        {
+                                            @Html.AntiForgeryToken()
+
+                                            @Html.Hidden(
+                                                "primedbaID",
+                                                primedba.ID,
+                                                new
+                                                {
+                                                    id = "primedbaID_" + primedba.ID
+                                                })
+
+                                            <button type="submit"
+                                                    class="dugme dugme-success">
+                                                Označi kao obrađenu
+                                            </button>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <span>-</span>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
+            <div class="primedbe-prazno">
+                <h2>Nema podnetih primedbi</h2>
+
+                <p>
+                    Kada posetioci podnesu primedbe na preliminarnu
+                    rang-listu, one će se prikazati ovde.
+                </p>
+            </div>
+        }
+    </div>
+</div>

@@ -1,0 +1,313 @@
+﻿@model KorisnickiInterfejsMVC.Models.StudentPrijavljivanjeVM
+
+@{
+    ViewBag.Title = "Nova prijava";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="okvir">
+    <div class="desno-panel studentska-prijava">
+
+        <div class="prijava-studenta-zaglavlje">
+            <div>
+                <h1>Nova prijava za stipendiju</h1>
+
+                <p class="stranica-opis">
+                    Unesite podatke o studentu, studijama
+                    i prihodima domaćinstva.
+                </p>
+            </div>
+
+            <a href="@Url.Action("Index", "Zaposleni")"
+               class="dugme dugme-cancel">
+                Nazad na panel
+            </a>
+        </div>
+
+        @if (TempData["Poruka"] != null)
+        {
+            <div class="alert alert-info" role="status">
+                @TempData["Poruka"]
+            </div>
+        }
+
+        @using (Html.BeginForm(
+            "Prijava",
+            "Student",
+            FormMethod.Post,
+            new { @class = "studentska-prijava-forma" }))
+        {
+            @Html.AntiForgeryToken()
+
+            @Html.ValidationSummary(
+                true,
+                "",
+                new { @class = "text-danger" })
+
+            <fieldset class="prijava-sekcija">
+                <legend>Lični i kontakt podaci</legend>
+
+                <div class="prijava-mreza">
+                    <div class="polje-grupa">
+                        @Html.LabelFor(x => x.Ime, "Ime")
+
+                        @Html.TextBoxFor(x => x.Ime, new
+                        {
+                            @class = "polje-unos",
+                            placeholder = "Unesite ime",
+                            autocomplete = "given-name"
+                        })
+
+                        @Html.ValidationMessageFor(
+                            x => x.Ime,
+                            "",
+                            new { @class = "text-danger" })
+                    </div>
+
+                    <div class="polje-grupa">
+                        @Html.LabelFor(x => x.Prezime, "Prezime")
+
+                        @Html.TextBoxFor(x => x.Prezime, new
+                        {
+                            @class = "polje-unos",
+                            placeholder = "Unesite prezime",
+                            autocomplete = "family-name"
+                        })
+
+                        @Html.ValidationMessageFor(
+                            x => x.Prezime,
+                            "",
+                            new { @class = "text-danger" })
+                    </div>
+
+                    <div class="polje-grupa">
+                        @Html.LabelFor(
+                            x => x.DatumRodjenja,
+                            "Datum rođenja")
+
+                        @Html.TextBoxFor(
+                            x => x.DatumRodjenja,
+                            "{0:yyyy-MM-dd}",
+                            new
+                            {
+                                type = "date",
+                                @class = "polje-unos",
+                                autocomplete = "bday"
+                            })
+
+                        @Html.ValidationMessageFor(
+                            x => x.DatumRodjenja,
+                            "",
+                            new { @class = "text-danger" })
+                    </div>
+
+                    <div class="polje-grupa">
+                        @Html.LabelFor(x => x.Email, "Email")
+
+                        @Html.TextBoxFor(x => x.Email, new
+                        {
+                            type = "email",
+                            @class = "polje-unos",
+                            placeholder = "ime@primer.com",
+                            autocomplete = "email"
+                        })
+
+                        @Html.ValidationMessageFor(
+                            x => x.Email,
+                            "",
+                            new { @class = "text-danger" })
+                    </div>
+
+                    <div class="polje-grupa">
+                        @Html.LabelFor(x => x.Telefon, "Telefon")
+
+                        @Html.TextBoxFor(x => x.Telefon, new
+                        {
+                            type = "tel",
+                            @class = "polje-unos",
+                            placeholder = "Unesite broj telefona",
+                            autocomplete = "tel"
+                        })
+
+                        @Html.ValidationMessageFor(
+                            x => x.Telefon,
+                            "",
+                            new { @class = "text-danger" })
+                    </div>
+                </div>
+            </fieldset>
+
+            <fieldset class="prijava-sekcija">
+                <legend>Podaci o studijama</legend>
+
+                <div class="prijava-mreza">
+                    <div class="polje-grupa">
+                        @Html.LabelFor(
+                            x => x.BrojIndeksa,
+                            "Broj indeksa")
+
+                        @Html.TextBoxFor(x => x.BrojIndeksa, new
+                        {
+                            @class = "polje-unos",
+                            placeholder = "Unesite broj indeksa"
+                        })
+
+                        @Html.ValidationMessageFor(
+                            x => x.BrojIndeksa,
+                            "",
+                            new { @class = "text-danger" })
+                    </div>
+
+                    <div class="polje-grupa">
+                        @Html.LabelFor(
+                            x => x.StudijskiProgram,
+                            "Studijski program")
+
+                        @Html.TextBoxFor(x => x.StudijskiProgram, new
+                        {
+                            @class = "polje-unos",
+                            placeholder = "Unesite studijski program"
+                        })
+
+                        @Html.ValidationMessageFor(
+                            x => x.StudijskiProgram,
+                            "",
+                            new { @class = "text-danger" })
+                    </div>
+
+                    <div class="polje-grupa">
+                        @Html.LabelFor(
+                            x => x.GodinaStudija,
+                            "Godina studija")
+
+                        @Html.TextBoxFor(x => x.GodinaStudija, new
+                        {
+                            @class = "polje-unos",
+                            placeholder = "Unesite godinu studija"
+                        })
+
+                        @Html.ValidationMessageFor(
+                            x => x.GodinaStudija,
+                            "",
+                            new { @class = "text-danger" })
+                    </div>
+
+                    <div class="polje-grupa">
+                        @Html.LabelFor(x => x.Prosek, "Prosek ocena")
+
+                        @Html.TextBoxFor(x => x.Prosek, new
+                        {
+                            type = "number",
+                            step = "0.01",
+                            min = "5.00",
+                            max = "10.00",
+                            @class = "polje-unos",
+                            placeholder = "Unesite prosek"
+                        })
+
+                        @Html.ValidationMessageFor(
+                            x => x.Prosek,
+                            "",
+                            new { @class = "text-danger" })
+                    </div>
+                </div>
+            </fieldset>
+
+            <fieldset class="prijava-sekcija">
+                <legend>Podaci o domaćinstvu</legend>
+
+                <div class="prijava-mreza">
+                    <div class="polje-grupa">
+                        @Html.LabelFor(
+                            x => x.UkupnaPrimanjaDomacinstva,
+                            "Ukupna primanja domaćinstva")
+
+                        @Html.TextBoxFor(
+                            x => x.UkupnaPrimanjaDomacinstva,
+                            new
+                            {
+                                type = "number",
+                                step = "0.01",
+                                min = "0",
+                                @class = "polje-unos",
+                                placeholder = "Unesite iznos"
+                            })
+
+                        @Html.ValidationMessageFor(
+                            x => x.UkupnaPrimanjaDomacinstva,
+                            "",
+                            new { @class = "text-danger" })
+                    </div>
+
+                    <div class="polje-grupa">
+                        @Html.LabelFor(
+                            x => x.BrojClanovaPorodice,
+                            "Broj članova porodice")
+
+                        @Html.TextBoxFor(
+                            x => x.BrojClanovaPorodice,
+                            new
+                            {
+                                type = "number",
+                                min = "1",
+                                step = "1",
+                                @class = "polje-unos",
+                                placeholder = "Unesite broj članova"
+                            })
+
+                        @Html.ValidationMessageFor(
+                            x => x.BrojClanovaPorodice,
+                            "",
+                            new { @class = "text-danger" })
+                    </div>
+
+                    <div class="prijava-potvrda">
+                        <div class="prijava-cekboks">
+                            @Html.CheckBoxFor(x => x.BezRoditelja)
+
+                            @Html.LabelFor(
+                                x => x.BezRoditelja,
+                                "Student je bez roditelja")
+                        </div>
+
+                        @Html.ValidationMessageFor(
+                            x => x.BezRoditelja,
+                            "",
+                            new { @class = "text-danger" })
+                    </div>
+
+                    <div class="prijava-potvrda">
+                        <div class="prijava-cekboks">
+                            @Html.CheckBoxFor(
+                                x => x.DokumentacijaPrihodaDostavljenaChecked)
+
+                            @Html.LabelFor(
+                                x => x.DokumentacijaPrihodaDostavljenaChecked,
+                                "Dokumentacija o prihodima je dostavljena")
+                        </div>
+
+                        @Html.ValidationMessageFor(
+                            x => x.DokumentacijaPrihodaDostavljenaChecked,
+                            "",
+                            new { @class = "text-danger" })
+                    </div>
+                </div>
+            </fieldset>
+
+            <div class="prijava-studenta-akcije">
+                <p>
+                    Proverite unete podatke pre čuvanja prijave.
+                </p>
+
+                <button type="submit"
+                        class="dugme dugme-success">
+                    Sačuvaj prijavu
+                </button>
+            </div>
+        }
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

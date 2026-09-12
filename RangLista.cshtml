@@ -1,0 +1,73 @@
+@model List<KorisnickiInterfejsMVC.Models.StudentRankingVM>
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="okvir">
+    <div class="levo-panel">
+        @using (Html.BeginForm("RangLista", "Admin", FormMethod.Get))
+        {
+            <div class="sekcija-kutija">
+                <div class="naslov-sekcije">Filtar</div>
+                @Html.TextBox("godinaStudija", ViewBag.GodinaStudija as string, new { @class = "polje-unos", placeholder = "Godina studija" })
+                @Html.DropDownList("isEligible", new SelectList(new[] {
+                    new { Value = "", Text = "Sve prijave" },
+                    new { Value = "true", Text = "Samo podobni" },
+                    new { Value = "false", Text = "Samo nepodobni" }
+                }, "Value", "Text", ViewBag.IsEligible?.ToString().ToLower()), new { @class = "polje-unos" })
+                <button class="dugme dugme-filter">Prikaži listu</button>
+            </div>
+        }
+
+        <div class="sekcija-kutija">
+            <a href="@Url.Action("ExportRangLista", "Admin")" class="dugme dugme-print">Preuzmi CSV</a>
+        </div>
+    </div>
+
+    <div class="desno-panel">
+        <div class="print-naslov">Rang lista studenata</div>
+
+        <table class="tabela">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Ime</th>
+                    <th>Prezime</th>
+                    <th>Broj indeksa</th>
+                    <th>Program</th>
+                    <th>Godina</th>
+                    <th>Prosek</th>
+                    <th>Bez roditelja</th>
+                    <th>Dokumentacija</th>
+                    <th>Ukupno primanja</th>
+                    <th>Br. ?lanova</th>
+                    <th>Prose?na primanja</th>
+                    <th>Bodovi</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{ int rank = 1; }
+                @foreach (var student in Model)
+                {
+                    <tr>
+                        <td>@rank</td>
+                        <td>@student.Ime</td>
+                        <td>@student.Prezime</td>
+                        <td>@student.BrojIndeksa</td>
+                        <td>@student.StudijskiProgram</td>
+                        <td>@student.GodinaStudija</td>
+                        <td>@student.Prosek</td>
+                        <td>@(student.BezRoditelja ? "Da" : "Ne")</td>
+                        <td>@(student.DokumentacijaPrihodaDostavljena ? "Da" : "Ne")</td>
+                        <td>@student.UkupnaPrimanjaDoma?instva</td>
+                        <td>@student.Broj?lanovaPorodice</td>
+                        <td>@student.Prose?naPrimanjaPo?lanu.ToString("F2")</td>
+                        <td>@student.UkupnoBodova</td>
+                    </tr>
+                    rank++;
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

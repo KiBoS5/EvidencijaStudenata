@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="AmbulantaDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Pregled">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="PacijentID" Type="Int32" Nullable="false" />
+    <Property Name="LekarID" Type="Int32" Nullable="false" />
+    <Property Name="DatumPregleda" Type="DateTime" Nullable="false" Precision="0" />
+    <Property Name="VremePregleda" Type="Time" Nullable="false" Precision="7" />
+    <Property Name="TipPregleda" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Napomena" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+    <Property Name="UslugaID" Type="Int32" />
+  </EntityType>
+  <EntityContainer Name="AmbulantaDBEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Pregleds" EntityType="Self.Pregled" />
+  </EntityContainer>
+</Schema>

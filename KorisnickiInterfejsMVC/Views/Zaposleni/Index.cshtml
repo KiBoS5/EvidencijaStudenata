@@ -1,0 +1,79 @@
+﻿@{
+    ViewBag.Title = "Panel zaposlenog";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="okvir">
+    <div class="desno-panel panel-zaposlenog">
+
+        <div class="panel-zaposlenog-zaglavlje">
+            <span class="panel-zaposlenog-oznaka">
+                STUDENTSKE STIPENDIJE
+            </span>
+
+            <h1>Panel zaposlenog</h1>
+
+            <p class="stranica-opis">
+                Evidentirajte prijave studenata i proverite
+                dostavljenu dokumentaciju.
+            </p>
+        </div>
+
+        @if (TempData["Poruka"] != null)
+        {
+            <div class="alert alert-info" role="status">
+                @TempData["Poruka"]
+            </div>
+        }
+
+        <div class="zaposleni-kartice">
+
+            <section class="zaposleni-kartica"
+                     aria-labelledby="naslovNovaPrijava">
+
+                <span class="zaposleni-kartica-oznaka">
+                    PRIJAVE
+                </span>
+
+                <h2 id="naslovNovaPrijava">
+                    Nova prijava studenta
+                </h2>
+
+                <p>
+                    Unesite lične podatke studenta, podatke
+                    o studijama i prihodima domaćinstva
+                    za prijavu na konkurs za stipendiju.
+                </p>
+
+                <a href="@Url.Action("Prijava", "Student")"
+                   class="dugme">
+                    Kreiraj prijavu
+                </a>
+            </section>
+
+            <section class="zaposleni-kartica"
+                     aria-labelledby="naslovDokumentacija">
+
+                <span class="zaposleni-kartica-oznaka">
+                    DOKUMENTACIJA
+                </span>
+
+                <h2 id="naslovDokumentacija">
+                    Provera dokumentacije
+                </h2>
+
+                <p>
+                    Pregledajte dokumentaciju studenata,
+                    evidentirajte podnošenje i unesite
+                    rezultat provere sa napomenom.
+                </p>
+
+                <a href="@Url.Action("Index", "Dokumentacija")"
+                   class="dugme">
+                    Pregledaj dokumentaciju
+                </a>
+            </section>
+
+        </div>
+    </div>
+</div>

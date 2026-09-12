@@ -1,0 +1,113 @@
+@model List<KorisnickiInterfejsMVC.Models.StudentDokumentaciaVM>
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="okvir">
+    <div class="desno-panel">
+        <div class="print-naslov">Provera dokumentacije studenata</div>
+
+        @if (TempData["Poruka"] != null)
+        {
+            <div class="alert alert-info">@TempData["Poruka"]</div>
+        }
+
+        <table class="tabela">
+            <thead>
+                <tr>
+                    <th>Ime i prezime</th>
+                    <th>Broj indeksa</th>
+                    <th>Stanje procesa</th>
+                    <th>Podneseni dokumenti</th>
+                    <th>Datum podnosenja</th>
+                    <th>Provereni dokumenti</th>
+                    <th>Datum provere</th>
+                    <th>Napomena</th>
+                    <th>Akcije</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var doc in Model)
+                {
+                    <tr>
+                        <td>@doc.StudentIme @doc.StudentPrezime</td>
+                        <td>@doc.BrojIndeksa</td>
+                        <td>
+                            <span class="badge @GetBadgeClass(doc.StanjeProcesa)">
+                                @doc.StanjeProcesa
+                            </span>
+                        </td>
+                        <td>@(doc.SviDokumentiPodneseni ? "? Da" : "? Ne")</td>
+                        <td>@(doc.DatumPodnosenja?.ToString("dd.MM.yyyy") ?? "-")</td>
+                        <td>@(doc.SviDokumentiProvereni ? "? Da" : "? Ne")</td>
+                        <td>@(doc.DatumProvere?.ToString("dd.MM.yyyy") ?? "-")</td>
+                        <td>@doc.NapomenaProvere</td>
+                        <td>
+                            @if (doc.SviDokumentiPodneseni && !doc.SviDokumentiProvereni)
+                            {
+                                <button class="dugme dugme-small" onclick="pokaziFormuProvere(@doc.StudentID)">
+                                    Provjeri
+                                </button>
+                            }
+                            @if (doc.SviDokumentiProvereni && !doc.SpremnaZaUnos)
+                            {
+                                @using (Html.BeginForm("Ozna?iSpremnaZaUnos", "Admin", FormMethod.Post, new { style = "display:inline;" }))
+                                {
+                                    @Html.Hidden("studentID", doc.StudentID)
+                                    <button type="submit" class="dugme dugme-success">Sprema za unos</button>
+                                }
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Modal forma za proveru dokumentacije -->
+<div id="formaProvere" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); background:white; padding:20px; border:1px solid #ccc; z-index:1000; min-width:400px; box-shadow:0 0 10px rgba(0,0,0,0.3);">
+    <h3>Provera dokumentacije</h3>
+    @using (Html.BeginForm("ProveridokumentacijuStudenta", "Admin", FormMethod.Post))
+    {
+        @Html.Hidden("studentID", 0)
+        
+        <div class="polje-grupa">
+            <label>Napomena:</label>
+            <textarea name="napomena" class="polje-unos" rows="4" placeholder="Unesite napomenu o proveri..."></textarea>
+        </div>
+
+        <button type="submit" class="dugme dugme-success">Provjeri dokumentaciju</button>
+        <button type="button" class="dugme dugme-cancel" onclick="sakrijFormuProvere()">Otkaži</button>
+    }
+</div>
+
+<div id="pozadina" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.3); z-index:999;" onclick="sakrijFormuProvere()"></div>
+
+@section Scripts {
+    <script>
+        function pokaziFormuProvere(studentId) {
+            document.querySelector('input[name="studentID"]').value = studentId;
+            document.getElementById('formaProvere').style.display = 'block';
+            document.getElementById('pozadina').style.display = 'block';
+        }
+
+        function sakrijFormuProvere() {
+            document.getElementById('formaProvere').style.display = 'none';
+            document.getElementById('pozadina').style.display = 'none';
+        }
+    </script>
+}
+
+@helper GetBadgeClass(string stanje)
+{
+    if (stanje.Contains("?ekanje"))
+        @<text>badge-warning</text>;
+    else if (stanje.Contains("proveri"))
+        @<text>badge-info</text>;
+    else if (stanje.Contains("Spremna"))
+        @<text>badge-success</text>;
+    else
+        @<text>badge-secondary</text>;
+}

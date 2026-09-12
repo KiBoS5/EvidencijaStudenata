@@ -1,0 +1,108 @@
+﻿@model KorisnickiInterfejsMVC.Models.UlogujVM
+
+@{
+    ViewBag.Title = "Prijava korisnika";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="prijava-okvir">
+    <section class="prijava-kartica"
+             aria-labelledby="naslovPrijave">
+
+        <div class="prijava-zaglavlje">
+            <p class="prijava-oznaka">
+                STUDENTSKE STIPENDIJE
+            </p>
+
+            <h1 id="naslovPrijave" class="prijava-naslov">
+                Dobro došli
+            </h1>
+
+            <p class="stranica-opis">
+                Prijavite se svojim korisničkim nalogom.
+            </p>
+        </div>
+
+        @using (Html.BeginForm(
+            "UlogujAdmin",
+            "Nalog",
+            FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+
+            @Html.ValidationSummary(
+                true,
+                "",
+                new { @class = "text-danger" })
+
+            <div class="polje-grupa">
+                @Html.LabelFor(
+                    x => x.KorisnickoIme,
+                    "Korisničko ime")
+
+                @Html.TextBoxFor(
+                    x => x.KorisnickoIme,
+                    new
+                    {
+                        @class = "polje-unos",
+                        placeholder = "Unesite korisničko ime",
+                        autocomplete = "username",
+                        autocapitalize = "none",
+                        spellcheck = "false"
+                    })
+
+                @Html.ValidationMessageFor(
+                    x => x.KorisnickoIme,
+                    "",
+                    new { @class = "text-danger" })
+            </div>
+
+            <div class="polje-grupa">
+                @Html.LabelFor(
+                    x => x.Lozinka,
+                    "Lozinka")
+
+                @Html.PasswordFor(
+                    x => x.Lozinka,
+                    new
+                    {
+                        @class = "polje-unos",
+                        placeholder = "Unesite lozinku",
+                        autocomplete = "current-password"
+                    })
+
+                @Html.ValidationMessageFor(
+                    x => x.Lozinka,
+                    "",
+                    new { @class = "text-danger" })
+            </div>
+
+            if (ViewBag.Poruka != null)
+            {
+                <div class="prijava-greska" role="alert">
+                    @ViewBag.Poruka
+                </div>
+            }
+
+            <button type="submit"
+                    class="dugme prijava-dugme">
+                Prijavite se
+            </button>
+        }
+
+        <div class="prijava-podnozje">
+            <p>
+                Pristup za zaposlene i administratore.
+            </p>
+
+            <a href="@Url.Action("Index", "Home")">
+                Povratak na početnu
+            </a>
+        </div>
+
+    </section>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

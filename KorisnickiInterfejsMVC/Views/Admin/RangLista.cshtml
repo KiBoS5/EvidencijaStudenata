@@ -1,0 +1,290 @@
+﻿@model List<KorisnickiInterfejsMVC.Models.StudentRankingVM>
+
+@{
+    ViewBag.Title = "Rang-lista studenata";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    string godinaStudija = ViewBag.GodinaStudija as string;
+    string isEligibleVrednost = "";
+
+    if (ViewBag.IsEligible != null)
+    {
+        isEligibleVrednost =
+            (bool)ViewBag.IsEligible ? "true" : "false";
+    }
+
+    bool imaStudenata = Model != null && Model.Count > 0;
+    int brojStudenata = imaStudenata ? Model.Count : 0;
+}
+
+<div class="okvir admin-rang-okvir">
+    <aside class="levo-panel admin-rang-sidebar"
+           aria-label="Filteri i akcije rang-liste">
+
+        <div class="sekcija-kutija">
+            <h2 class="naslov-sekcije">Filteri</h2>
+
+            @using (Html.BeginForm(
+                "RangLista",
+                "Admin",
+                FormMethod.Get))
+            {
+                <div class="polje-grupa">
+                    <label for="godinaStudija">
+                        Godina studija
+                    </label>
+
+                    @Html.TextBox(
+                        "godinaStudija",
+                        godinaStudija,
+                        new
+                        {
+                            @class = "polje-unos",
+                            placeholder = "Sve godine studija"
+                        })
+                </div>
+
+                <div class="polje-grupa">
+                    <label for="isEligible">
+                        Podobnost kandidata
+                    </label>
+
+                    @Html.DropDownList(
+                        "isEligible",
+                        new SelectList(
+                            new[]
+                            {
+                                new { Value = "", Text = "Sve prijave" },
+                                new { Value = "true", Text = "Samo podobni" },
+                                new { Value = "false", Text = "Samo nepodobni" }
+                            },
+                            "Value",
+                            "Text",
+                            isEligibleVrednost),
+                        new { @class = "polje-unos" })
+                </div>
+
+                <button type="submit" class="dugme">
+                    Prikaži listu
+                </button>
+
+                <a href="@Url.Action("RangLista", "Admin")"
+                   class="admin-rang-reset">
+                    Poništi filtere
+                </a>
+            }
+        </div>
+
+        <div class="sekcija-kutija">
+            <h2 class="naslov-sekcije">Štampanje</h2>
+
+            <p>
+                Otvorite prikaz za štampu sa primenjenim filterima.
+            </p>
+
+            <a href="@Url.Action(
+                         "StampajRangListu",
+                         "Admin",
+                         new
+                         {
+                             godinaStudija = godinaStudija,
+                             isEligible = isEligibleVrednost
+                         })"
+               class="dugme dugme-print"
+               target="_blank"
+               rel="noopener">
+                Štampaj rang-listu
+            </a>
+        </div>
+
+        <div class="sekcija-kutija admin-rang-objava">
+            <h2 class="naslov-sekcije">
+                Objavljivanje
+            </h2>
+
+            <p>
+                Objavite preliminarnu rang-listu sa primenjenim
+                filterima. Prethodna objava biće zamenjena.
+            </p>
+
+            @using (Html.BeginForm(
+                "ObjaviPreliminarnuRangListu",
+                "Admin",
+                FormMethod.Post,
+                new
+                {
+                    onsubmit =
+                        "return confirm('Da li želite da objavite preliminarnu rang-listu sa primenjenim filterima? Prethodna objava će biti zamenjena.');"
+                }))
+            {
+                @Html.AntiForgeryToken()
+
+                <input type="hidden"
+                       name="godinaStudija"
+                       value="@godinaStudija" />
+
+                <input type="hidden"
+                       name="isEligible"
+                       value="@isEligibleVrednost" />
+
+                if (imaStudenata)
+                {
+                    <button type="submit"
+                            class="dugme dugme-success">
+                        Objavi preliminarnu rang-listu
+                    </button>
+                }
+                else
+                {
+                    <button type="submit"
+                            class="dugme dugme-success"
+                            disabled>
+                        Objavi preliminarnu rang-listu
+                    </button>
+
+                    <p class="admin-rang-pomoc">
+                        Nema kandidata za objavljivanje.
+                    </p>
+                }
+            }
+        </div>
+    </aside>
+
+    <div class="desno-panel admin-rang-panel">
+        <div class="admin-rang-zaglavlje">
+            <div>
+                <h1>Rang-lista studenata</h1>
+
+                <p class="stranica-opis">
+                    Pregled kandidata i ostvarenih bodova
+                    prema izabranim kriterijumima.
+                </p>
+            </div>
+
+            <a href="@Url.Action("Index", "Admin")"
+               class="dugme dugme-cancel">
+                Nazad na panel
+            </a>
+        </div>
+
+        @if (TempData["Poruka"] != null)
+        {
+            <div class="alert alert-info" role="status">
+                @TempData["Poruka"]
+            </div>
+        }
+
+        <div class="admin-rang-pregled">
+            <span>
+                Prikazano kandidata:
+                <strong>@brojStudenata</strong>
+            </span>
+
+            <span>
+                Godina:
+                <strong>
+                    @(string.IsNullOrWhiteSpace(godinaStudija)
+                        ? "Sve"
+                        : godinaStudija)
+                </strong>
+            </span>
+
+            <span>
+                Podobnost:
+                <strong>
+                    @(isEligibleVrednost == "true"
+                        ? "Samo podobni"
+                        : isEligibleVrednost == "false"
+                            ? "Samo nepodobni"
+                            : "Sve prijave")
+                </strong>
+            </span>
+        </div>
+
+        @if (imaStudenata)
+        {
+            <div class="admin-rang-tabela-omotac"
+                 role="region"
+                 aria-label="Rang-lista studenata"
+                 tabindex="0">
+
+                <table class="tabela admin-rang-tabela">
+                    <thead>
+                        <tr>
+                            <th scope="col">Pozicija</th>
+                            <th scope="col">Ime i prezime</th>
+                            <th scope="col">Broj indeksa</th>
+                            <th scope="col">Program</th>
+                            <th scope="col">Godina</th>
+                            <th scope="col">Prosek</th>
+                            <th scope="col">Bez roditelja</th>
+                            <th scope="col">Dokumentacija</th>
+                            <th scope="col">Ukupna primanja</th>
+                            <th scope="col">Bodovi</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @{ int pozicija = 1; }
+
+                        @foreach (var student in Model)
+                        {
+                            <tr>
+                                <td class="admin-rang-pozicija">
+                                    @pozicija
+                                </td>
+
+                                <td class="admin-rang-ime">
+                                    @student.Ime @student.Prezime
+                                </td>
+
+                                <td>@student.BrojIndeksa</td>
+                                <td>@student.StudijskiProgram</td>
+                                <td>@student.GodinaStudija</td>
+
+                                <td class="admin-rang-broj">
+                                    @(student.Prosek.ToString("0.00"))
+                                </td>
+
+                                <td>
+                                    @(student.BezRoditelja ? "Da" : "Ne")
+                                </td>
+
+                                <td>
+                                    @(student.DokumentacijaPrihodaDostavljena
+                                        ? "Dostavljena"
+                                        : "Nije dostavljena")
+                                </td>
+
+                                <td class="admin-rang-broj">
+                                    @(student.UkupnaPrimanjaDomacinstva.ToString("N2"))
+                                </td>
+
+                                <td class="admin-rang-broj admin-rang-bodovi">
+                                    @(student.UkupnoBodova.ToString("0.##"))
+                                </td>
+                            </tr>
+
+                            pozicija++;
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
+            <div class="admin-rang-prazno">
+                <h2>Nema kandidata za izabrane kriterijume</h2>
+
+                <p>
+                    Promenite filtere ili prikažite sve prijave.
+                </p>
+
+                <a href="@Url.Action("RangLista", "Admin")"
+                   class="dugme">
+                    Prikaži sve prijave
+                </a>
+            </div>
+        }
+    </div>
+</div>

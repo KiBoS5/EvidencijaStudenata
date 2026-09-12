@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="AmbulantaDBModelStoreContainer" CdmEntityContainer="AmbulantaDBEntities">
+    <EntitySetMapping Name="Pregleds">
+      <EntityTypeMapping TypeName="AmbulantaDBModel.Pregled">
+        <MappingFragment StoreEntitySet="Pregled">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="PacijentID" ColumnName="PacijentID" />
+          <ScalarProperty Name="LekarID" ColumnName="LekarID" />
+          <ScalarProperty Name="DatumPregleda" ColumnName="DatumPregleda" />
+          <ScalarProperty Name="VremePregleda" ColumnName="VremePregleda" />
+          <ScalarProperty Name="TipPregleda" ColumnName="TipPregleda" />
+          <ScalarProperty Name="Napomena" ColumnName="Napomena" />
+          <ScalarProperty Name="UslugaID" ColumnName="UslugaID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>

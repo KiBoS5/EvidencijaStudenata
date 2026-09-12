@@ -1,0 +1,139 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+    <meta charset="utf-8" />
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0" />
+
+    <title>Portal za studentske stipendije</title>
+
+    <link href="~/CSS/stil.css"
+          rel="stylesheet"
+          type="text/css" />
+</head>
+
+<body>
+
+    <header class="zaglavlje">
+
+        <a href="@Url.Action("Index", "Home")"
+           class="logo">
+
+            <img src="~/Slike/logo.png"
+                 alt="Logo fakulteta" />
+
+            <span>
+                Fakultet
+                <span>Stipendije</span>
+            </span>
+        </a>
+
+        <nav class="navigacija">
+
+            <a href="@Url.Action("Index", "Home")"
+               class="dugme-navigacije">
+
+                <img src="~/Slike/pocetna.png"
+                     alt="" />
+
+                Početna
+            </a>
+
+            <a href="@Url.Action("Index", "PreliminarnaLista")"
+               class="dugme-navigacije">
+
+                Preliminarna rang-lista
+            </a>
+
+            <a href="@Url.Action("UlogujAdmin", "Nalog")"
+               class="dugme-navigacije">
+
+                <img src="~/Slike/administrator.png"
+                     alt="" />
+
+                Prijava
+            </a>
+
+        </nav>
+
+    </header>
+
+    <main>
+
+        <section class="hero-sekcija">
+
+            <div class="hero-left">
+
+                <h1 class="naslov-hero">
+                    Portal za studentske
+                    <span>stipendije</span>
+                </h1>
+
+                <p class="tekst-hero">
+                    Portal omogućava zaposlenima jednostavno
+                    evidentiranje prijava za studentske
+                    stipendije, proveru dostavljene
+                    dokumentacije i formiranje rang-liste
+                    kandidata.
+                </p>
+
+                <p class="tekst-hero">
+                    Bodovanje se vrši na osnovu proseka
+                    ocena, socio-ekonomskog statusa i
+                    godine studija.
+                </p>
+
+                <p class="slogan-hero">
+                    „Ulaganje u znanje – ulaganje u
+                    budućnost.“
+                </p>
+
+                <div class="hero-akcije">
+
+                    <a href="@Url.Action(
+                                 "UlogujAdmin",
+                                 "Nalog")"
+                       class="dugme dugme-success">
+                        Prijavite se
+                    </a>
+
+                    <a href="@Url.Action(
+                                 "Index",
+                                 "PreliminarnaLista")"
+                       class="dugme dugme-sekundarno">
+                        Pogledajte rang-listu
+                    </a>
+
+                </div>
+            </div>
+
+            <div class="desno-hero">
+                <img src="~/Slike/logo.png"
+                     alt="Pregled studentskih prijava" />
+            </div>
+
+        </section>
+
+    </main>
+
+    <footer class="futer">
+        <div>
+            Komisija za dodelu stipendija
+        </div>
+
+        <div>
+            Univerzitetska 1, Zrenjanin
+            &nbsp;|&nbsp;
+            023/123-456
+            &nbsp;|&nbsp;
+            stipendije@fakultet.ac.rs
+        </div>
+    </footer>
+
+</body>
+</html>

@@ -1,0 +1,350 @@
+﻿@model KorisnickiInterfejsMVC.Models.SkoringKonfiguraciaVM
+
+@{
+    ViewBag.Title = "Podešavanje bodovanja";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="okvir skoring-okvir">
+    <aside class="levo-panel skoring-uputstvo">
+        <div class="sekcija-kutija">
+            <h2 class="naslov-sekcije">Uputstvo</h2>
+
+            <p>
+                Podesite pragove proseka, prihoda i broj
+                bodova po godini studija.
+            </p>
+
+            <div class="skoring-uputstvo-stavka">
+                <h3>Prosek ocena</h3>
+                <p>
+                    Minimalan prosek određuje uslov za učešće.
+                    Ostali pragovi određuju dodelu 10, 15
+                    ili 20 bodova.
+                </p>
+            </div>
+
+            <div class="skoring-uputstvo-stavka">
+                <h3>Primanja domaćinstva</h3>
+                <p>
+                    Pragovi se odnose na primanja po članu
+                    domaćinstva.
+                </p>
+            </div>
+
+            <div class="skoring-uputstvo-stavka">
+                <h3>Godina studija</h3>
+                <p>
+                    Unesite broj bodova za svaku godinu
+                    i za master ili doktorske studije.
+                </p>
+            </div>
+        </div>
+    </aside>
+
+    <div class="desno-panel skoring-panel">
+        <div class="skoring-zaglavlje">
+            <div>
+                <h1>Podešavanje bodovanja</h1>
+
+                <p class="stranica-opis">
+                    Upravljajte kriterijumima za bodovanje
+                    prijava za stipendiju.
+                </p>
+            </div>
+
+            <a href="@Url.Action("Index", "Admin")"
+               class="dugme dugme-cancel">
+                Nazad na panel
+            </a>
+        </div>
+
+        @if (TempData["Poruka"] != null)
+        {
+            <div class="alert alert-info" role="status">
+                @TempData["Poruka"]
+            </div>
+        }
+
+        @using (Html.BeginForm(
+            "UpravljanjeSkoringom",
+            "Admin",
+            FormMethod.Post,
+            new { @class = "skoring-forma" }))
+        {
+            @Html.AntiForgeryToken()
+
+            @Html.ValidationSummary(
+                true,
+                "",
+                new { @class = "text-danger" })
+
+            <fieldset class="skoring-sekcija">
+                <legend>Prosek ocena</legend>
+
+                <div class="skoring-polja">
+                    <div class="polje-grupa">
+                        @Html.LabelFor(
+                            x => x.MinimalanProsek,
+                            "Minimalan prosek za učešće")
+
+                        @Html.TextBoxFor(x => x.MinimalanProsek, new
+                        {
+                            @class = "polje-unos",
+                            type = "number",
+                            step = "0.01"
+                        })
+
+                        @Html.ValidationMessageFor(
+                            x => x.MinimalanProsek,
+                            "",
+                            new { @class = "text-danger" })
+                    </div>
+
+                    <div class="polje-grupa">
+                        @Html.LabelFor(
+                            x => x.ProsekZa10Bodova,
+                            "Prosek za 10 bodova — od")
+
+                        @Html.TextBoxFor(x => x.ProsekZa10Bodova, new
+                        {
+                            @class = "polje-unos",
+                            type = "number",
+                            step = "0.01"
+                        })
+
+                        @Html.ValidationMessageFor(
+                            x => x.ProsekZa10Bodova,
+                            "",
+                            new { @class = "text-danger" })
+                    </div>
+
+                    <div class="polje-grupa">
+                        @Html.LabelFor(
+                            x => x.ProsekZa15Bodova,
+                            "Prosek za 15 bodova — od")
+
+                        @Html.TextBoxFor(x => x.ProsekZa15Bodova, new
+                        {
+                            @class = "polje-unos",
+                            type = "number",
+                            step = "0.01"
+                        })
+
+                        @Html.ValidationMessageFor(
+                            x => x.ProsekZa15Bodova,
+                            "",
+                            new { @class = "text-danger" })
+                    </div>
+
+                    <div class="polje-grupa">
+                        @Html.LabelFor(
+                            x => x.ProsekZa20Bodova,
+                            "Prosek za 20 bodova — od")
+
+                        @Html.TextBoxFor(x => x.ProsekZa20Bodova, new
+                        {
+                            @class = "polje-unos",
+                            type = "number",
+                            step = "0.01"
+                        })
+
+                        @Html.ValidationMessageFor(
+                            x => x.ProsekZa20Bodova,
+                            "",
+                            new { @class = "text-danger" })
+                    </div>
+                </div>
+            </fieldset>
+
+            <fieldset class="skoring-sekcija">
+                <legend>Finansijski status</legend>
+
+                <p class="skoring-opis-sekcije">
+                    Unesite pragove primanja po članu domaćinstva.
+                </p>
+
+                <div class="skoring-polja">
+                    <div class="polje-grupa">
+                        @Html.LabelFor(
+                            x => x.PrimanjaZa10Bodova,
+                            "Primanja za 10 bodova — do")
+
+                        @Html.TextBoxFor(x => x.PrimanjaZa10Bodova, new
+                        {
+                            @class = "polje-unos",
+                            type = "number",
+                            step = "0.01"
+                        })
+
+                        @Html.ValidationMessageFor(
+                            x => x.PrimanjaZa10Bodova,
+                            "",
+                            new { @class = "text-danger" })
+                    </div>
+
+                    <div class="polje-grupa">
+                        @Html.LabelFor(
+                            x => x.PrimanjaZa1Bod,
+                            "Primanja za 1 bod — od")
+
+                        @Html.TextBoxFor(x => x.PrimanjaZa1Bod, new
+                        {
+                            @class = "polje-unos",
+                            type = "number",
+                            step = "0.01"
+                        })
+
+                        @Html.ValidationMessageFor(
+                            x => x.PrimanjaZa1Bod,
+                            "",
+                            new { @class = "text-danger" })
+                    </div>
+
+                    <div class="polje-grupa skoring-puna-sirina">
+                        @Html.LabelFor(
+                            x => x.BezRoditeljaMultiplier,
+                            "Multiplikator za studente bez roditelja")
+
+                        @Html.TextBoxFor(
+                            x => x.BezRoditeljaMultiplier,
+                            new
+                            {
+                                @class = "polje-unos",
+                                type = "number",
+                                step = "0.01",
+                                min = "0.1",
+                                max = "1.0"
+                            })
+
+                        @Html.ValidationMessageFor(
+                            x => x.BezRoditeljaMultiplier,
+                            "",
+                            new { @class = "text-danger" })
+                    </div>
+                </div>
+            </fieldset>
+
+            <fieldset class="skoring-sekcija">
+                <legend>Godina studija</legend>
+
+                <div class="skoring-polja">
+                    <div class="polje-grupa">
+                        @Html.LabelFor(
+                            x => x.BodoviGodinaStudije1,
+                            "Prva godina")
+
+                        @Html.TextBoxFor(x => x.BodoviGodinaStudije1, new
+                        {
+                            @class = "polje-unos",
+                            type = "number",
+                            step = "1",
+                            min = "0",
+                            max = "20"
+                        })
+
+                        @Html.ValidationMessageFor(
+                            x => x.BodoviGodinaStudije1,
+                            "",
+                            new { @class = "text-danger" })
+                    </div>
+
+                    <div class="polje-grupa">
+                        @Html.LabelFor(
+                            x => x.BodoviGodinaStudije2,
+                            "Druga godina")
+
+                        @Html.TextBoxFor(x => x.BodoviGodinaStudije2, new
+                        {
+                            @class = "polje-unos",
+                            type = "number",
+                            step = "1",
+                            min = "0",
+                            max = "20"
+                        })
+
+                        @Html.ValidationMessageFor(
+                            x => x.BodoviGodinaStudije2,
+                            "",
+                            new { @class = "text-danger" })
+                    </div>
+
+                    <div class="polje-grupa">
+                        @Html.LabelFor(
+                            x => x.BodoviGodinaStudije3,
+                            "Treća godina")
+
+                        @Html.TextBoxFor(x => x.BodoviGodinaStudije3, new
+                        {
+                            @class = "polje-unos",
+                            type = "number",
+                            step = "1",
+                            min = "0",
+                            max = "20"
+                        })
+
+                        @Html.ValidationMessageFor(
+                            x => x.BodoviGodinaStudije3,
+                            "",
+                            new { @class = "text-danger" })
+                    </div>
+
+                    <div class="polje-grupa">
+                        @Html.LabelFor(
+                            x => x.BodoviGodinaStudije4,
+                            "Četvrta godina")
+
+                        @Html.TextBoxFor(x => x.BodoviGodinaStudije4, new
+                        {
+                            @class = "polje-unos",
+                            type = "number",
+                            step = "1",
+                            min = "0",
+                            max = "20"
+                        })
+
+                        @Html.ValidationMessageFor(
+                            x => x.BodoviGodinaStudije4,
+                            "",
+                            new { @class = "text-danger" })
+                    </div>
+
+                    <div class="polje-grupa skoring-puna-sirina">
+                        @Html.LabelFor(
+                            x => x.BodoviMaster,
+                            "Master / doktorske studije")
+
+                        @Html.TextBoxFor(x => x.BodoviMaster, new
+                        {
+                            @class = "polje-unos",
+                            type = "number",
+                            step = "1",
+                            min = "0",
+                            max = "20"
+                        })
+
+                        @Html.ValidationMessageFor(
+                            x => x.BodoviMaster,
+                            "",
+                            new { @class = "text-danger" })
+                    </div>
+                </div>
+            </fieldset>
+
+            <div class="skoring-akcije">
+                <p>
+                    Proverite unete pragove i bodove pre čuvanja.
+                </p>
+
+                <button type="submit"
+                        class="dugme dugme-success">
+                    Sačuvaj konfiguraciju
+                </button>
+            </div>
+        }
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

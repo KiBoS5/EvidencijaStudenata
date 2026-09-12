@@ -1,0 +1,12 @@
+C:\Users\neman\source\repos\ZakazivanjePregleda\DBUtils\bin\Debug\DBUtils.dll
+C:\Users\neman\source\repos\ZakazivanjePregleda\DBUtils\bin\Debug\DBUtils.pdb
+C:\Users\neman\source\repos\ZakazivanjePregleda\DBUtils\obj\Debug\DBUtils.csproj.AssemblyReference.cache
+C:\Users\neman\source\repos\ZakazivanjePregleda\DBUtils\obj\Debug\DBUtils.csproj.CoreCompileInputs.cache
+C:\Users\neman\source\repos\ZakazivanjePregleda\DBUtils\obj\Debug\DBUtils.dll
+C:\Users\neman\source\repos\ZakazivanjePregleda\DBUtils\obj\Debug\DBUtils.pdb
+C:\Users\bvkib\Downloads\ZakazivanjePregleda\ZakazivanjePregleda\DBUtils\bin\Debug\DBUtils.dll
+C:\Users\bvkib\Downloads\ZakazivanjePregleda\ZakazivanjePregleda\DBUtils\bin\Debug\DBUtils.pdb
+C:\Users\bvkib\Downloads\ZakazivanjePregleda\ZakazivanjePregleda\DBUtils\obj\Debug\DBUtils.csproj.AssemblyReference.cache
+C:\Users\bvkib\Downloads\ZakazivanjePregleda\ZakazivanjePregleda\DBUtils\obj\Debug\DBUtils.csproj.CoreCompileInputs.cache
+C:\Users\bvkib\Downloads\ZakazivanjePregleda\ZakazivanjePregleda\DBUtils\obj\Debug\DBUtils.dll
+C:\Users\bvkib\Downloads\ZakazivanjePregleda\ZakazivanjePregleda\DBUtils\obj\Debug\DBUtils.pdb

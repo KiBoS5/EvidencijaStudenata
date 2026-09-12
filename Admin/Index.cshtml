@@ -1,0 +1,31 @@
+@{
+    ViewBag.Title = "Admin Panel";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="admin-kontejner">
+
+    <div class="admin-naslov">
+        Upravljanje stipendijama
+    </div>
+
+    <div class="admin-mreza">
+
+        <a href="@Url.Action("ProveraDocumentacije", "Admin")" class="admin-kartica">
+            <img src="@Url.Content("~/Slike/document.png")" />
+            <span>Provera dokumentacije</span>
+        </a>
+
+        <a href="@Url.Action("RangLista", "Admin")" class="admin-kartica">
+            <img src="@Url.Content("~/Slike/pregledpodataka.png")" />
+            <span>Rang lista studenata</span>
+        </a>
+
+        <a href="@Url.Action("UpravljanjeSkoringom", "Admin")" class="admin-kartica">
+            <img src="@Url.Content("~/Slike/settings.png")" />
+            <span>Upravljanje skoringom</span>
+        </a>
+
+    </div>
+
+</div>

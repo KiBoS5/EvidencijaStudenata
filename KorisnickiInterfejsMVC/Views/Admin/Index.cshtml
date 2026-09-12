@@ -1,0 +1,124 @@
+﻿@{
+    ViewBag.Title = "Administratorski panel";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="okvir">
+    <div class="desno-panel panel-administratora">
+
+        <div class="panel-administratora-zaglavlje">
+            <span class="panel-administratora-oznaka">
+                STUDENTSKE STIPENDIJE
+            </span>
+
+            <h1>Administratorski panel</h1>
+
+            <p class="stranica-opis">
+                Pregledajte rang-listu, dodajte korisnike,
+                obradite primedbe i podesite kriterijume bodovanja.
+            </p>
+        </div>
+
+        @if (TempData["Poruka"] != null)
+        {
+            <div class="alert alert-info" role="status">
+                @TempData["Poruka"]
+            </div>
+        }
+
+        <div class="administrator-kartice">
+
+            <section class="administrator-kartica"
+                     aria-labelledby="naslovRangLista">
+
+                <span class="administrator-kartica-oznaka">
+                    RANGIRANJE
+                </span>
+
+                <h2 id="naslovRangLista">
+                    Rang-lista studenata
+                </h2>
+
+                <p>
+                    Pregledajte bodove i redosled kandidata,
+                    filtrirajte prijave i objavite
+                    preliminarnu rang-listu.
+                </p>
+
+                <a href="@Url.Action("RangLista", "Admin")"
+                   class="dugme">
+                    Pregledaj rang-listu
+                </a>
+            </section>
+
+            <section class="administrator-kartica"
+                     aria-labelledby="naslovKorisnici">
+
+                <span class="administrator-kartica-oznaka">
+                    KORISNICI
+                </span>
+
+                <h2 id="naslovKorisnici">
+                    Dodavanje korisnika
+                </h2>
+
+                <p>
+                    Kreirajte nalog za novog korisnika
+                    i dodelite mu odgovarajuću ulogu
+                    u aplikaciji.
+                </p>
+
+                <a href="@Url.Action("DodajKorisnika", "Admin")"
+                   class="dugme">
+                    Dodaj korisnika
+                </a>
+            </section>
+
+            <section class="administrator-kartica"
+                     aria-labelledby="naslovPrimedbe">
+
+                <span class="administrator-kartica-oznaka">
+                    PRIMEDBE
+                </span>
+
+                <h2 id="naslovPrimedbe">
+                    Primedbe na rang-listu
+                </h2>
+
+                <p>
+                    Pregledajte primedbe podnete na
+                    preliminarnu rang-listu i označite
+                    obrađene primedbe.
+                </p>
+
+                <a href="@Url.Action("PrimedbeNaRangListu", "Admin")"
+                   class="dugme">
+                    Pregledaj primedbe
+                </a>
+            </section>
+
+            <section class="administrator-kartica"
+                     aria-labelledby="naslovSkoring">
+
+                <span class="administrator-kartica-oznaka">
+                    BODOVANJE
+                </span>
+
+                <h2 id="naslovSkoring">
+                    Podešavanje bodovanja
+                </h2>
+
+                <p>
+                    Podesite minimalan prosek, pragove primanja
+                    i broj bodova po godini studija.
+                </p>
+
+                <a href="@Url.Action("UpravljanjeSkoringom", "Admin")"
+                   class="dugme">
+                    Podesi bodovanje
+                </a>
+            </section>
+
+        </div>
+    </div>
+</div>
