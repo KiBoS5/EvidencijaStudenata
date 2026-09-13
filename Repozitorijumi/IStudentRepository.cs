@@ -5,7 +5,7 @@ namespace Repozitorijumi
 {
     public interface IStudentRepository
     {
-        List<StudentKlasa> GetAll();
+        List<StudentKlasa> DajSve();
         int DodajStudenta(StudentKlasa student,int maksimalanBrojPrijava);
     }
 }

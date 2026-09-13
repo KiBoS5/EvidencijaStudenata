@@ -127,7 +127,7 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
-    <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\PocetnaController.cs" />
     <Compile Include="Controllers\NalogController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\DokumentacijaController.cs" />
@@ -204,7 +204,7 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\Pocetna\Index.cshtml" />
     <Content Include="Views\Admin\Index.cshtml" />
     <Content Include="Views\Admin\RangLista.cshtml" />
     <Content Include="Views\Nalog\UlogujAdmin.cshtml" />

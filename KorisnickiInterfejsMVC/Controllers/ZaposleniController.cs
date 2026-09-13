@@ -37,7 +37,7 @@ namespace KorisnickiInterfejsMVC.Controllers
                 filterContext.Result =
                     RedirectToAction(
                         "Index",
-                        "Home");
+                        "Pocetna");
             }
         }
 

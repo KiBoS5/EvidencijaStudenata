@@ -51,10 +51,10 @@ namespace PoslovnaLogika
                 ogranicenja,
                 DateTimeOffset.UtcNow);
 
-            // GetAll vraća sve prijave, uključujući one
+            // DajSve vraća sve prijave, uključujući one
             // koje nemaju ispravnu dokumentaciju.
             int trenutniBrojPrijava =
-                _studentRepo.GetAll().Count;
+                _studentRepo.DajSve().Count;
 
             _pravila.ProveriBrojPrijava(
                 ogranicenja,

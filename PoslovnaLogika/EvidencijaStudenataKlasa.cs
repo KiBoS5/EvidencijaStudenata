@@ -204,7 +204,7 @@ namespace PoslovnaLogika
             // Jedno učitavanje konfiguracije za celu rang-listu.
             var konfiguracija = _skoringServis.DajKonfiguraciju();
 
-            var lista = _repo.GetAll()
+            var lista = _repo.DajSve()
                 .Where(x => x.DokumentacijaSpremnaZaRangiranje)
                 .ToList();
 

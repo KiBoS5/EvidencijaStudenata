@@ -85,7 +85,7 @@ namespace KorisnickiInterfejsMVC.Controllers
 
                 return RedirectToAction(
                     "Index",
-                    "Home");
+                    "Pocetna");
             }
 
             try
@@ -355,7 +355,7 @@ namespace KorisnickiInterfejsMVC.Controllers
 
                 return RedirectToAction(
                     "Index",
-                    "Home");
+                    "Pocetna");
             }
 
             try

@@ -14,7 +14,7 @@ namespace Repozitorijumi
             _konekcija = konekcija;
         }
 
-        public List<StudentKlasa> GetAll()
+        public List<StudentKlasa> DajSve()
         {
             var db = new SPStudentDBKlasa(_konekcija);
             return db.DajSveStudente();
