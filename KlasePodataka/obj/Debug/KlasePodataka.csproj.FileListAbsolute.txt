@@ -16,3 +16,17 @@ C:\Users\bvkib\Downloads\ZakazivanjePregleda\ZakazivanjePregleda\KlasePodataka\o
 C:\Users\bvkib\Downloads\ZakazivanjePregleda\ZakazivanjePregleda\KlasePodataka\obj\Debug\KlasePod.C2AE2122.Up2Date
 C:\Users\bvkib\Downloads\ZakazivanjePregleda\ZakazivanjePregleda\KlasePodataka\obj\Debug\KlasePodataka.dll
 C:\Users\bvkib\Downloads\ZakazivanjePregleda\ZakazivanjePregleda\KlasePodataka\obj\Debug\KlasePodataka.pdb
+C:\Users\bvkib\source\repos\EvidencijaStudenata\KlasePodataka\bin\Debug\KlasePodataka.dll
+C:\Users\bvkib\source\repos\EvidencijaStudenata\KlasePodataka\bin\Debug\KlasePodataka.pdb
+C:\Users\bvkib\source\repos\EvidencijaStudenata\KlasePodataka\bin\Debug\DBUtils.dll
+C:\Users\bvkib\source\repos\EvidencijaStudenata\KlasePodataka\bin\Debug\DBUtils.pdb
+C:\Users\bvkib\source\repos\EvidencijaStudenata\KlasePodataka\obj\Debug\KlasePodataka.csproj.AssemblyReference.cache
+C:\Users\bvkib\source\repos\EvidencijaStudenata\KlasePodataka\obj\Debug\KlasePodataka.csproj.CoreCompileInputs.cache
+C:\Users\bvkib\source\repos\EvidencijaStudenata\KlasePodataka\obj\Debug\KlasePod.C2AE2122.Up2Date
+C:\Users\bvkib\source\repos\EvidencijaStudenata\KlasePodataka\obj\Debug\KlasePodataka.dll
+C:\Users\bvkib\source\repos\EvidencijaStudenata\KlasePodataka\obj\Debug\KlasePodataka.pdb
+C:\Users\bvkib\source\repos\EvidencijaStudenata\KlasePodataka\bin\Debug\KlasePodataka.dll.config
+C:\Users\bvkib\source\repos\EvidencijaStudenata\KlasePodataka\bin\Debug\EntityFramework.dll
+C:\Users\bvkib\source\repos\EvidencijaStudenata\KlasePodataka\bin\Debug\EntityFramework.SqlServer.dll
+C:\Users\bvkib\source\repos\EvidencijaStudenata\KlasePodataka\bin\Debug\EntityFramework.xml
+C:\Users\bvkib\source\repos\EvidencijaStudenata\KlasePodataka\bin\Debug\EntityFramework.SqlServer.xml

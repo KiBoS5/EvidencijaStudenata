@@ -7,6 +7,10 @@ using KlasePodataka;
 using KorisnickiInterfejsMVC.Models;
 using PoslovnaLogika;
 using Repozitorijumi;
+using System.Net.Http;
+using System.Threading.Tasks;
+using Servisi;
+
 
 namespace KorisnickiInterfejsMVC.Controllers
 {
@@ -80,78 +84,103 @@ namespace KorisnickiInterfejsMVC.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult PodnesiPrimedbu(
+        public async Task<ActionResult> PodnesiPrimedbu(
             [Bind(Prefix = "Primedba")]
             PrimedbaNaRangListuVM primedba)
         {
+            // Javni deo je namenjen neprijavljenim korisnicima.
+            if (Session["KorisnikID"] != null)
+            {
+                return new HttpStatusCodeResult(403);
+            }
+
             PreliminarnaRangListaJavniVM model =
                 KreirajJavniModel();
 
             model.Primedba =
-                primedba ??
-                new PrimedbaNaRangListuVM();
+                primedba ?? new PrimedbaNaRangListuVM();
 
-            if (!model.ListaJeObjavljena)
+            if (primedba == null)
             {
                 ModelState.AddModelError(
                     "",
-                    "Preliminarna rang-lista nije objavljena.");
-
-                return View(
-                    "Index",
-                    model);
+                    "Podaci primedbe nisu dostavljeni.");
             }
 
             if (!ModelState.IsValid)
             {
-                return View(
-                    "Index",
-                    model);
+                return View("Index", model);
             }
 
             try
             {
-                PrimedbaNaRangListuKlasa novaPrimedba =
-                    new PrimedbaNaRangListuKlasa
-                    {
-                        Ime = primedba.Ime,
-                        Prezime = primedba.Prezime,
-                        Email = primedba.Email,
-                        Komentar = primedba.Komentar
-                    };
+                var novaPrimedba = new PrimedbaNaRangListuKlasa
+                {
+                    Ime = primedba.Ime,
+                    Prezime = primedba.Prezime,
+                    Email = primedba.Email,
+                    Komentar = primedba.Komentar
+                };
 
-                KreirajServisPrimedbi()
-                    .Dodaj(novaPrimedba);
+                string adresaServisa =
+                    ConfigurationManager
+                        .AppSettings["OgranicenjaApiUrl"];
+
+                IOgranicenjaKlijent ogranicenjaKlijent =
+                    new OgranicenjaRestKlijent(adresaServisa);
+
+                await KreirajServisPrimedbi().DodajAsync(
+                    novaPrimedba,
+                    model.ListaJeObjavljena,
+                    ogranicenjaKlijent);
 
                 TempData["Poruka"] =
                     "Primedba je uspešno podneta.";
 
                 return RedirectToAction("Index");
             }
-            catch (ArgumentException ex)
+            catch (HttpRequestException ex)
             {
+                System.Diagnostics.Trace.TraceError(ex.ToString());
+
                 ModelState.AddModelError(
                     "",
-                    ex.Message);
+                    "Servis za parametre konkursa trenutno nije dostupan. " +
+                    "Pokušajte ponovo kasnije.");
+            }
+            catch (TaskCanceledException ex)
+            {
+                System.Diagnostics.Trace.TraceError(ex.ToString());
+
+                ModelState.AddModelError(
+                    "",
+                    "Servis za parametre konkursa nije odgovorio na vreme. " +
+                    "Pokušajte ponovo.");
+            }
+            catch (ArgumentException ex)
+            {
+                ModelState.AddModelError("", ex.Message);
+            }
+            catch (InvalidOperationException ex)
+            {
+                ModelState.AddModelError("", ex.Message);
             }
             catch (SqlException ex)
                 when (ex.Number >= 50030 &&
                       ex.Number <= 50032)
             {
-                ModelState.AddModelError(
-                    "",
-                    ex.Message);
+                ModelState.AddModelError("", ex.Message);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                System.Diagnostics.Trace.TraceError(ex.ToString());
+
                 ModelState.AddModelError(
                     "",
                     "Dogodila se greška pri podnošenju primedbe.");
             }
 
-            return View(
-                "Index",
-                model);
+            return View("Index", model);
         }
 
         private PreliminarnaRangListaJavniVM

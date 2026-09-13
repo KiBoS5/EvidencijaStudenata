@@ -10,3 +10,9 @@ C:\Users\bvkib\Downloads\ZakazivanjePregleda\ZakazivanjePregleda\DBUtils\obj\Deb
 C:\Users\bvkib\Downloads\ZakazivanjePregleda\ZakazivanjePregleda\DBUtils\obj\Debug\DBUtils.csproj.CoreCompileInputs.cache
 C:\Users\bvkib\Downloads\ZakazivanjePregleda\ZakazivanjePregleda\DBUtils\obj\Debug\DBUtils.dll
 C:\Users\bvkib\Downloads\ZakazivanjePregleda\ZakazivanjePregleda\DBUtils\obj\Debug\DBUtils.pdb
+C:\Users\bvkib\source\repos\EvidencijaStudenata\DBUtils\bin\Debug\DBUtils.dll
+C:\Users\bvkib\source\repos\EvidencijaStudenata\DBUtils\bin\Debug\DBUtils.pdb
+C:\Users\bvkib\source\repos\EvidencijaStudenata\DBUtils\obj\Debug\DBUtils.csproj.AssemblyReference.cache
+C:\Users\bvkib\source\repos\EvidencijaStudenata\DBUtils\obj\Debug\DBUtils.csproj.CoreCompileInputs.cache
+C:\Users\bvkib\source\repos\EvidencijaStudenata\DBUtils\obj\Debug\DBUtils.dll
+C:\Users\bvkib\source\repos\EvidencijaStudenata\DBUtils\obj\Debug\DBUtils.pdb

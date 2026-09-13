@@ -44,7 +44,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IOgranicenjaKlijent.cs" />
     <Compile Include="OgranicenjaKonkursaKlasa.cs" />
+    <Compile Include="OgranicenjaRestKlijent.cs" />
     <Compile Include="OgranicenjaServis.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

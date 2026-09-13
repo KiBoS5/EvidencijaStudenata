@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Net.Mail;
 using KlasePodataka;
 using Repozitorijumi;
+using System.Threading.Tasks;
+using Servisi;
 
 namespace PoslovnaLogika
 {
@@ -22,38 +24,40 @@ namespace PoslovnaLogika
             _repo = repo;
         }
 
-        public void Dodaj(
-            PrimedbaNaRangListuKlasa primedba)
+        public async Task DodajAsync(
+            PrimedbaNaRangListuKlasa primedba,
+            bool listaJeObjavljena,
+            IOgranicenjaKlijent ogranicenjaKlijent)
         {
             if (primedba == null)
             {
-                throw new ArgumentNullException(
-                    "primedba");
+                throw new ArgumentNullException(nameof(primedba));
             }
 
-            primedba.Ime =
-                SrediObaveznuVrednost(
-                    primedba.Ime,
-                    "Ime",
-                    100);
+            if (ogranicenjaKlijent == null)
+            {
+                throw new ArgumentNullException(nameof(ogranicenjaKlijent));
+            }
 
-            primedba.Prezime =
-                SrediObaveznuVrednost(
-                    primedba.Prezime,
-                    "Prezime",
-                    100);
+            primedba.Ime = SrediObaveznuVrednost(
+                primedba.Ime,
+                "Ime",
+                100);
 
-            primedba.Email =
-                SrediObaveznuVrednost(
-                    primedba.Email,
-                    "Email",
-                    255);
+            primedba.Prezime = SrediObaveznuVrednost(
+                primedba.Prezime,
+                "Prezime",
+                100);
 
-            primedba.Komentar =
-                SrediObaveznuVrednost(
-                    primedba.Komentar,
-                    "Komentar",
-                    2000);
+            primedba.Email = SrediObaveznuVrednost(
+                primedba.Email,
+                "Email",
+                255);
+
+            primedba.Komentar = SrediObaveznuVrednost(
+                primedba.Komentar,
+                "Komentar",
+                2000);
 
             if (primedba.Komentar.Length < 10)
             {
@@ -67,6 +71,19 @@ namespace PoslovnaLogika
                     "Unesite ispravnu email adresu.");
             }
 
+            var ogranicenja =
+                await ogranicenjaKlijent
+                    .DajOgranicenjaAsync()
+                    .ConfigureAwait(false);
+
+            var pravila = new OgranicenjaKonkursaPravila();
+
+            pravila.ProveriPodnosenjePrimedbe(
+                ogranicenja,
+                listaJeObjavljena,
+                DateTimeOffset.UtcNow);
+
+            // Upis tek nakon uspešne validacije i provere pravila.
             _repo.Dodaj(primedba);
         }
 

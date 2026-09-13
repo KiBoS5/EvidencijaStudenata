@@ -425,7 +425,7 @@ namespace KorisnickiInterfejsMVC.Controllers
         private SkoringKonfiguracijaServis KreirajSkoringServis()
         {
             ISkoringKonfiguracijaRepository repo =
-                new SkoringKonfiguracijaRepositorySP(konekcija);
+                new SkoringKonfiguracijaRepositoryEF(konekcija);
 
             return new SkoringKonfiguracijaServis(repo);
         }
