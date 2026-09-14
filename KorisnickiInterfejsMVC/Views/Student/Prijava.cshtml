@@ -276,21 +276,7 @@
                             new { @class = "text-danger" })
                     </div>
 
-                    <div class="prijava-potvrda">
-                        <div class="prijava-cekboks">
-                            @Html.CheckBoxFor(
-                                x => x.DokumentacijaPrihodaDostavljenaChecked)
-
-                            @Html.LabelFor(
-                                x => x.DokumentacijaPrihodaDostavljenaChecked,
-                                "Dokumentacija o prihodima je dostavljena")
-                        </div>
-
-                        @Html.ValidationMessageFor(
-                            x => x.DokumentacijaPrihodaDostavljenaChecked,
-                            "",
-                            new { @class = "text-danger" })
-                    </div>
+                  
                 </div>
             </fieldset>
 

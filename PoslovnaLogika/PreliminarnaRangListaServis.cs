@@ -80,10 +80,6 @@ namespace PoslovnaLogika
                 objavioKorisnikID);
         }
 
-        public List<PreliminarnaRangListaKlasa>
-            DajObjavljenuListu()
-        {
-            return _repo.DajObjavljenuListu();
-        }
+       
     }
 }

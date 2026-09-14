@@ -1,0 +1,345 @@
+﻿@model KorisnickiInterfejsMVC.Models.StudentDetaljiVM
+
+@{
+    ViewBag.Title = "Detalji prijave";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    bool jeZaposleni =
+    ViewBag.JeZaposleni != null &&
+    (bool)ViewBag.JeZaposleni;
+}
+
+
+<div class="okvir">
+    <div class="desno-panel detalji-prijave">
+
+        <div class="detalji-prijave-zaglavlje">
+            <div>
+                <h1>@Model.Ime @Model.Prezime</h1>
+
+                <p class="stranica-opis">
+                    Prijava broj @Model.StudentID ·
+                    Broj indeksa: @Model.BrojIndeksa
+                </p>
+            </div>
+
+            <a href="@Url.Action("Index", "Dokumentacija")"
+               class="dugme dugme-cancel">
+                Nazad na dokumentaciju
+            </a>
+
+            <a href="@Url.Action(
+             "Stampaj",
+             "StudentDetalji",
+             new { id = Model.StudentID })"
+               class="dugme dugme-print"
+               target="_blank"
+               rel="noopener">
+                Štampaj prijavu
+            </a>
+        </div>
+        @if (ViewBag.JeZaposleni == true)
+        {
+            <div class="student-akcije">
+                <a href="@Url.Action(
+                     "Izmeni",
+                     "Student",
+                     new { id = Model.StudentID })"
+                   class="dugme">
+                    Izmeni prijavu
+                </a>
+
+                @using (Html.BeginForm(
+                    "Obrisi",
+                    "Student",
+                    FormMethod.Post,
+                    new
+                    {
+                        @class = "student-brisanje",
+                        onsubmit =
+                            "return confirm('Da li želite trajno da obrišete prijavu i svu pripadajuću dokumentaciju?');"
+                    }))
+                {
+                    @Html.AntiForgeryToken()
+
+                    @Html.Hidden(
+                        "studentID",
+                        Model.StudentID,
+                        new { id = "brisanjeStudentID" })
+
+                    <button type="submit" class="dugme student-dugme-obrisi">
+                        Obriši prijavu
+                    </button>
+                }
+            </div>
+        }
+        @if (TempData["Poruka"] != null)
+        {
+            <div class="alert alert-info" role="status">
+                @TempData["Poruka"]
+            </div>
+        }
+
+        <section aria-labelledby="naslovPodaci">
+            <h2 id="naslovPodaci">Podaci o studentu</h2>
+
+            <dl class="student-podaci">
+                <div>
+                    <dt>Datum rođenja</dt>
+                    <dd>@(Model.DatumRodjenja.ToString("dd.MM.yyyy"))</dd>
+                </div>
+
+                <div>
+                    <dt>Email</dt>
+                    <dd>@Model.Email</dd>
+                </div>
+
+                <div>
+                    <dt>Telefon</dt>
+                    <dd>
+                        @(string.IsNullOrWhiteSpace(Model.Telefon)
+                            ? "-"
+                            : Model.Telefon)
+                    </dd>
+                </div>
+
+                <div>
+                    <dt>Studijski program</dt>
+                    <dd>@Model.StudijskiProgram</dd>
+                </div>
+
+                <div>
+                    <dt>Godina studija</dt>
+                    <dd>@Model.GodinaStudija</dd>
+                </div>
+
+                <div>
+                    <dt>Prosek ocena</dt>
+                    <dd>@(Model.Prosek.ToString("0.00"))</dd>
+                </div>
+
+                <div>
+                    <dt>Bez roditelja</dt>
+                    <dd>@(Model.BezRoditelja ? "Da" : "Ne")</dd>
+                </div>
+
+                <div>
+                    <dt>Ukupna primanja domaćinstva</dt>
+                    <dd>
+                        @(Model.UkupnaPrimanjaDomacinstva.ToString("N2"))
+                    </dd>
+                </div>
+
+                <div>
+                    <dt>Broj članova porodice</dt>
+                    <dd>@Model.BrojClanovaPorodice</dd>
+                </div>
+            </dl>
+        </section>
+
+        <section class="student-dokumenti"
+                 aria-labelledby="naslovDokumenti">
+
+            <h2 id="naslovDokumenti">Dokumenti prijave</h2>
+
+            <p class="stranica-opis">
+                Pregled pojedinačnih dokumenata i rezultata provere.
+            </p>
+
+            @if (Model.Dokumenti != null && Model.Dokumenti.Count > 0)
+            {
+                <div class="detalji-tabela-omotac"
+                     role="region"
+                     aria-label="Dokumenti studenta"
+                     tabindex="0">
+
+                    <table class="tabela">
+                        <thead>
+                            <tr>
+                                <th scope="col">Dokument</th>
+                                <th scope="col">Obavezan</th>
+                                <th scope="col">Podnet</th>
+                                <th scope="col">Datum podnošenja</th>
+                                <th scope="col">Rezultat provere</th>
+                                <th scope="col">Proverio</th>
+                                <th scope="col">Datum provere</th>
+                                <th scope="col">Napomena</th>
+                                @if (jeZaposleni)
+                                {
+                                    <th scope="col">Akcija</th>
+                                }
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            @foreach (var dokument in Model.Dokumenti)
+                            {
+                                <tr>
+                                    <td>
+                                        <strong>@dokument.NazivDokumenta</strong>
+                                    </td>
+
+                                    <td>@(dokument.Obavezan ? "Da" : "Ne")</td>
+                                    <td>@(dokument.Podnet ? "Da" : "Ne")</td>
+
+                                    <td>
+                                        @(dokument.DatumPodnosenja.HasValue
+                                            ? dokument.DatumPodnosenja.Value
+                                                .ToString("dd.MM.yyyy HH:mm")
+                                            : "-")
+                                    </td>
+
+                                    <td>
+                                        @if (!dokument.Ispravan.HasValue)
+                                        {
+                                            <span class="badge badge-secondary">
+                                                Nije proveren
+                                            </span>
+                                        }
+                                        else if (dokument.Ispravan.Value)
+                                        {
+                                            <span class="badge badge-success">
+                                                Ispravan
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge badge-danger">
+                                                Neispravan
+                                            </span>
+                                        }
+                                    </td>
+
+                                    <td>
+                                        @(string.IsNullOrWhiteSpace(
+                                            dokument.ProverioImeIPrezime)
+                                            ? "-"
+                                            : dokument.ProverioImeIPrezime)
+                                    </td>
+
+                                    <td>
+                                        @(dokument.DatumProvere.HasValue
+                                            ? dokument.DatumProvere.Value
+                                                .ToString("dd.MM.yyyy HH:mm")
+                                            : "-")
+                                    </td>
+
+                                    <td><div class="detalji-napomena">@(string.IsNullOrWhiteSpace(dokument.Napomena) ? "-" : dokument.Napomena)</div></td>
+
+                                    @if (jeZaposleni)
+                                    {
+                                        <td class="dokument-akcije">
+                                            @if (!dokument.Podnet)
+                                            {
+                                                using (Html.BeginForm(
+                                                    "OznaciPodnetim",
+                                                    "StudentDetalji",
+                                                    FormMethod.Post))
+                                                {
+                                                    @Html.AntiForgeryToken()
+
+                                                    <input type="hidden"
+                                                           name="studentID"
+                                                           value="@Model.StudentID" />
+
+                                                    <input type="hidden"
+                                                           name="dokumentID"
+                                                           value="@dokument.ID" />
+
+                                                    <button type="submit"
+                                                            class="dugme dugme-small">
+                                                        Označi kao podneto
+                                                    </button>
+                                                }
+                                            }
+                                            else if (dokument.Ispravan != true)
+                                            {
+                                                <details class="dokument-provera">
+                                                    <summary>
+                                                        @(dokument.Ispravan == false
+                        ? "Ponovo proveri"
+                        : "Proveri dokument")
+                                                    </summary>
+
+                                                    @using (Html.BeginForm(
+                                                        "ProveriDokument",
+                                                        "StudentDetalji",
+                                                        FormMethod.Post))
+                                                    {
+                                                        @Html.AntiForgeryToken()
+
+                                                        <input type="hidden"
+                                                               name="studentID"
+                                                               value="@Model.StudentID" />
+
+                                                        <input type="hidden"
+                                                               name="dokumentID"
+                                                               value="@dokument.ID" />
+
+                                                        <fieldset class="dokument-rezultat">
+                                                            <legend>Rezultat provere</legend>
+
+                                                            <label>
+                                                                <input type="radio"
+                                                                       name="ispravan"
+                                                                       value="true"
+                                                                       required />
+                                                                Ispravan
+                                                            </label>
+
+                                                            <label>
+                                                                <input type="radio"
+                                                                       name="ispravan"
+                                                                       value="false"
+                                                                       required />
+                                                                Neispravan
+                                                            </label>
+                                                        </fieldset>
+
+                                                        <label for="@("napomenaDokument_" + dokument.ID)">
+                                                            Napomena
+                                                        </label>
+
+                                                        <textarea id="@("napomenaDokument_" + dokument.ID)"
+                                                                  name="napomena"
+                                                                  class="polje-unos"
+                                                                  rows="3"
+                                                                  maxlength="500"
+                                                                  placeholder="Obavezna za neispravan dokument"></textarea>
+
+                                                        <button type="submit"
+                                                                class="dugme dugme-success">
+                                                            Sačuvaj proveru
+                                                        </button>
+                                                    }
+                                                </details>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge badge-success">
+                                                    Provera završena
+                                                </span>
+                                            }
+                                        </td>
+                                    }
+
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+
+                <p class="detalji-vreme">
+                    Datumi podnošenja i provere prikazani su u UTC vremenu.
+                </p>
+            }
+            else
+            {
+                <div class="alert alert-info">
+                    Za ovu prijavu još nisu formirani pojedinačni
+                    dokumenti. Prazna lista ne znači da je
+                    dokumentacija ispravna.
+                </div>
+            }
+        </section>
+    </div>
+</div>

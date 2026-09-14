@@ -26,8 +26,7 @@
 
             @if (Model.ListaJeObjavljena)
             {
-                <a href="#primedba"
-                   class="dugme">
+                <a href="#primedba" class="dugme">
                     Podnesite primedbu
                 </a>
             }
@@ -41,9 +40,9 @@
         }
 
         @Html.ValidationSummary(
-        true,
-        "",
-        new { @class = "text-danger" })
+            true,
+            "",
+            new { @class = "text-danger" })
 
         @if (Model.ListaJeObjavljena)
         {
@@ -159,9 +158,21 @@
                     @using (Html.BeginForm(
                         "PodnesiPrimedbu",
                         "PreliminarnaLista",
-                        FormMethod.Post))
+                        FormMethod.Post,
+                        new
+                        {
+                            id = "formaPrimedbe",
+                            novalidate = "novalidate"
+                        }))
                     {
                         @Html.AntiForgeryToken()
+
+                        <div id="greskePrimedbe"
+                             class="alert alert-danger"
+                             role="alert"
+                             tabindex="-1"
+                             style="display:none;">
+                        </div>
 
                         <div class="primedba-polja">
                             <div class="polje-grupa">
@@ -176,7 +187,8 @@
                                         @class = "polje-unos",
                                         maxlength = "100",
                                         autocomplete = "given-name",
-                                        placeholder = "Unesite ime"
+                                        placeholder = "Unesite ime",
+                                        data_val = "false"
                                     })
 
                                 @Html.ValidationMessageFor(
@@ -197,7 +209,8 @@
                                         @class = "polje-unos",
                                         maxlength = "100",
                                         autocomplete = "family-name",
-                                        placeholder = "Unesite prezime"
+                                        placeholder = "Unesite prezime",
+                                        data_val = "false"
                                     })
 
                                 @Html.ValidationMessageFor(
@@ -220,7 +233,8 @@
                                     type = "email",
                                     maxlength = "255",
                                     autocomplete = "email",
-                                    placeholder = "ime@primer.com"
+                                    placeholder = "ime@primer.com",
+                                    data_val = "false"
                                 })
 
                             @Html.ValidationMessageFor(
@@ -242,7 +256,8 @@
                                     rows = "6",
                                     maxlength = "2000",
                                     aria_describedby = "uputstvoKomentar",
-                                    placeholder = "Opišite razlog primedbe..."
+                                    placeholder = "Opišite razlog primedbe...",
+                                    data_val = "false"
                                 })
 
                             <p id="uputstvoKomentar"
@@ -286,5 +301,123 @@
 </div>
 
 @section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
+    <script>
+        (function () {
+            "use strict";
+
+            var forma = document.getElementById("formaPrimedbe");
+
+            if (!forma) {
+                return;
+            }
+
+            var prikazGresaka =
+                document.getElementById("greskePrimedbe");
+
+            var ime = forma.elements.namedItem("Primedba.Ime");
+            var prezime = forma.elements.namedItem("Primedba.Prezime");
+            var email = forma.elements.namedItem("Primedba.Email");
+            var komentar = forma.elements.namedItem("Primedba.Komentar");
+
+            var polja = [ime, prezime, email, komentar];
+
+            // \x40 predstavlja znak i izbegava Razor escape sekvence.
+            var emailObrazac = /^[^\s\x40]+\x40[^\s\x40]+\.[^\s\x40]+$/;
+
+            forma.addEventListener("submit", function (event) {
+                var greske = [];
+
+                prikazGresaka.style.display = "none";
+                prikazGresaka.textContent = "";
+
+                polja.forEach(function (polje) {
+                    polje.removeAttribute("aria-invalid");
+                    polje.classList.remove("input-validation-error");
+                });
+
+                function dodajGresku(polje, poruka) {
+                    greske.push({
+                        polje: polje,
+                        poruka: poruka
+                    });
+
+                    polje.setAttribute("aria-invalid", "true");
+                    polje.classList.add("input-validation-error");
+                }
+
+                function proveriObaveznoPolje(polje, naziv, maksimum) {
+                    var vrednost = polje.value.trim();
+
+                    if (vrednost.length === 0) {
+                        dodajGresku(
+                            polje,
+                            naziv + " je obavezno polje.");
+                    } else if (vrednost.length > maksimum) {
+                        dodajGresku(
+                            polje,
+                            naziv + " može imati najviše " +
+                            maksimum + " karaktera.");
+                    }
+
+                    return vrednost;
+                }
+
+                proveriObaveznoPolje(ime, "Ime", 100);
+                proveriObaveznoPolje(prezime, "Prezime", 100);
+
+                var emailVrednost =
+                    proveriObaveznoPolje(email, "Email", 255);
+
+                if (emailVrednost.length > 0 &&
+                    emailVrednost.length <= 255 &&
+                    !emailObrazac.test(emailVrednost)) {
+                    dodajGresku(
+                        email,
+                        "Unesite ispravnu email adresu, na primer ime\u0040primer.com.");
+                }
+
+                var komentarVrednost = komentar.value.trim();
+
+                if (komentarVrednost.length < 10 ||
+                    komentarVrednost.length > 2000) {
+                    dodajGresku(
+                        komentar,
+                        "Komentar mora imati između 10 i 2000 karaktera.");
+                }
+
+                if (greske.length === 0) {
+                    // Nastavlja se standardno slanje forme serveru.
+                    return;
+                }
+
+                event.preventDefault();
+
+                var naslov = document.createElement("p");
+                naslov.textContent = "Ispravite sledeće podatke:";
+                prikazGresaka.appendChild(naslov);
+
+                var lista = document.createElement("ul");
+
+                greske.forEach(function (greska) {
+                    var stavka = document.createElement("li");
+                    var link = document.createElement("a");
+
+                    link.href = "#" + greska.polje.id;
+                    link.textContent = greska.poruka;
+
+                    link.addEventListener("click", function (klik) {
+                        klik.preventDefault();
+                        greska.polje.focus();
+                    });
+
+                    stavka.appendChild(link);
+                    lista.appendChild(stavka);
+                });
+
+                prikazGresaka.appendChild(lista);
+                prikazGresaka.style.display = "block";
+                prikazGresaka.focus();
+            });
+        })();
+    </script>
 }

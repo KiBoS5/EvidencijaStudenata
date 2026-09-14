@@ -41,7 +41,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="FormaStudentKlasa.cs" />
+    <Compile Include="FormaPreliminarnaRangListaKlasa.cs" />
+    <Compile Include="FormaStudentDetaljiKlasa.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

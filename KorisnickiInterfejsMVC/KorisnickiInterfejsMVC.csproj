@@ -134,18 +134,21 @@
     <Compile Include="Controllers\OgranicenjaApiController.cs" />
     <Compile Include="Controllers\PreliminarnaListaController.cs" />
     <Compile Include="Controllers\StudentController.cs" />
+    <Compile Include="Controllers\StudentDetaljiController.cs" />
     <Compile Include="Controllers\ZaposleniController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AdministratorskaPrimedbaVM.cs" />
     <Compile Include="Models\DodajKorisnikaVM.cs" />
+    <Compile Include="Models\StudentDetaljiVM.cs" />
+    <Compile Include="Models\StudentDokumentVM.cs" />
     <Compile Include="Models\UlogujVM.cs" />
     <Compile Include="Models\PreliminarnaRangListaJavniVM.cs" />
     <Compile Include="Models\PreliminarnaRangListaStavkaVM.cs" />
     <Compile Include="Models\PrimedbaNaRangListuVM.cs" />
     <Compile Include="Models\SkoringKonfiguraciaVM.cs" />
-    <Compile Include="Models\StudentApplicationVM.cs" />
+    <Compile Include="Models\StudentPrijavljivanjeVM.cs" />
     <Compile Include="Models\StudentDokumentacijaVM.cs" />
     <Compile Include="Models\StudentRankingVM.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -215,6 +218,9 @@
     <Content Include="Views\Zaposleni\Index.cshtml" />
     <Content Include="Views\PreliminarnaLista\Index.cshtml" />
     <Content Include="Views\Admin\PrimedbeNaRangListu.cshtml" />
+    <Content Include="Views\StudentDetalji\Index.cshtml" />
+    <Content Include="Views\StudentDetalji\Stampaj.cshtml" />
+    <Content Include="Views\Student\Izmeni.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

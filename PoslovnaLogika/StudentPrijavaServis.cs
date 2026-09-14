@@ -54,7 +54,7 @@ namespace PoslovnaLogika
             // DajSve vraća sve prijave, uključujući one
             // koje nemaju ispravnu dokumentaciju.
             int trenutniBrojPrijava =
-                _studentRepo.DajSve().Count;
+                _studentRepo.DajBrojPrijava();
 
             _pravila.ProveriBrojPrijava(
                 ogranicenja,

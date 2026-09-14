@@ -10,7 +10,7 @@ using Repozitorijumi;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Servisi;
-
+using PrezentacionaLogika;
 
 namespace KorisnickiInterfejsMVC.Controllers
 {
@@ -190,7 +190,7 @@ namespace KorisnickiInterfejsMVC.Controllers
                 new PreliminarnaRangListaJavniVM();
 
             model.Stavke =
-                KreirajServisRangListe()
+                KreirajFormuRangListe()
                     .DajObjavljenuListu()
                     .Select(x =>
                         new PreliminarnaRangListaStavkaVM
@@ -231,15 +231,14 @@ namespace KorisnickiInterfejsMVC.Controllers
             return model;
         }
 
-        private PreliminarnaRangListaServis
-            KreirajServisRangListe()
+        private FormaPreliminarnaRangListaKlasa
+             KreirajFormuRangListe()
         {
             IPreliminarnaRangListaRepository repo =
                 new PreliminarnaRangListaRepositorySP(
                     _konekcija);
 
-            return new PreliminarnaRangListaServis(
-                repo);
+            return new FormaPreliminarnaRangListaKlasa(repo);
         }
 
         private PrimedbaNaRangListuServis

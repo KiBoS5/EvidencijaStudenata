@@ -1,0 +1,198 @@
+﻿@model KorisnickiInterfejsMVC.Models.StudentPrijavljivanjeVM
+
+@{
+    ViewBag.Title = "Izmena prijave";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    int studentID = Convert.ToInt32(ViewBag.StudentID);
+}
+
+<div class="okvir">
+    <div class="desno-panel">
+        <h1>Izmena prijave studenta</h1>
+
+        <div class="alert alert-info">
+            Nakon čuvanja izmene dokumenti ostaju evidentirani,
+            ali njihove rezultate provere treba ponovo potvrditi.
+            Izmena prijave na objavljenoj preliminarnoj listi
+            nije dozvoljena.
+        </div>
+
+        @using (Html.BeginForm(
+            "Izmeni",
+            "Student",
+            new { id = studentID },
+            FormMethod.Post,
+            new { @class = "forma-izmena-studenta" }))
+        {
+            @Html.AntiForgeryToken()
+
+            @Html.ValidationSummary(
+                true, "", new { @class = "text-danger" })
+
+            <div class="forma-red">
+                @Html.LabelFor(x => x.Ime, "Ime")
+                @Html.TextBoxFor(x => x.Ime, new
+                {
+                    @class = "polje-unos",
+                    maxlength = "100"
+                })
+                @Html.ValidationMessageFor(
+                    x => x.Ime, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="forma-red">
+                @Html.LabelFor(x => x.Prezime, "Prezime")
+                @Html.TextBoxFor(x => x.Prezime, new
+                {
+                    @class = "polje-unos",
+                    maxlength = "100"
+                })
+                @Html.ValidationMessageFor(
+                    x => x.Prezime, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="forma-red">
+                @Html.LabelFor(x => x.DatumRodjenja, "Datum rođenja")
+                @Html.TextBoxFor(
+                    x => x.DatumRodjenja,
+                    "{0:yyyy-MM-dd}",
+                    new
+                    {
+                        @class = "polje-unos",
+                        type = "date"
+                    })
+                @Html.ValidationMessageFor(
+                    x => x.DatumRodjenja,
+                    "",
+                    new { @class = "text-danger" })
+            </div>
+
+            <div class="forma-red">
+                @Html.LabelFor(x => x.Email, "Email")
+                @Html.TextBoxFor(x => x.Email, new
+                {
+                    @class = "polje-unos",
+                    type = "email",
+                    maxlength = "255"
+                })
+                @Html.ValidationMessageFor(
+                    x => x.Email, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="forma-red">
+                @Html.LabelFor(x => x.Telefon, "Telefon")
+                @Html.TextBoxFor(x => x.Telefon, new
+                {
+                    @class = "polje-unos",
+                    type = "tel",
+                    maxlength = "30"
+                })
+                @Html.ValidationMessageFor(
+                    x => x.Telefon, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="forma-red">
+                @Html.LabelFor(x => x.BrojIndeksa, "Broj indeksa")
+                @Html.TextBoxFor(x => x.BrojIndeksa, new
+                {
+                    @class = "polje-unos",
+                    maxlength = "50"
+                })
+                @Html.ValidationMessageFor(
+                    x => x.BrojIndeksa,
+                    "",
+                    new { @class = "text-danger" })
+            </div>
+
+            <div class="forma-red">
+                @Html.LabelFor(x => x.StudijskiProgram, "Studijski program")
+                @Html.TextBoxFor(x => x.StudijskiProgram, new
+                {
+                    @class = "polje-unos",
+                    maxlength = "150"
+                })
+                @Html.ValidationMessageFor(
+                    x => x.StudijskiProgram,
+                    "",
+                    new { @class = "text-danger" })
+            </div>
+
+            <div class="forma-red">
+                @Html.LabelFor(x => x.GodinaStudija, "Godina studija")
+                @Html.TextBoxFor(x => x.GodinaStudija, new
+                {
+                    @class = "polje-unos",
+                    maxlength = "50"
+                })
+                @Html.ValidationMessageFor(
+                    x => x.GodinaStudija,
+                    "",
+                    new { @class = "text-danger" })
+            </div>
+
+            <div class="cekboks-grupa">
+                @Html.CheckBoxFor(x => x.BezRoditelja)
+                @Html.LabelFor(x => x.BezRoditelja, "Bez roditelja")
+            </div>
+
+            <div class="forma-red">
+                @Html.LabelFor(x => x.Prosek, "Prosek ocena")
+                @Html.TextBoxFor(x => x.Prosek, new
+                {
+                    @class = "polje-unos",
+                    inputmode = "decimal"
+                })
+                @Html.ValidationMessageFor(
+                    x => x.Prosek, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="forma-red">
+                @Html.LabelFor(
+                    x => x.UkupnaPrimanjaDomacinstva,
+                    "Ukupna primanja domaćinstva")
+                @Html.TextBoxFor(x => x.UkupnaPrimanjaDomacinstva, new
+                {
+                    @class = "polje-unos",
+                    inputmode = "decimal"
+                })
+                @Html.ValidationMessageFor(
+                    x => x.UkupnaPrimanjaDomacinstva,
+                    "",
+                    new { @class = "text-danger" })
+            </div>
+
+            <div class="forma-red">
+                @Html.LabelFor(
+                    x => x.BrojClanovaPorodice,
+                    "Broj članova porodice")
+                @Html.TextBoxFor(x => x.BrojClanovaPorodice, new
+                {
+                    @class = "polje-unos",
+                    type = "number",
+                    min = "1",
+                    max = "20",
+                    step = "1"
+                })
+                @Html.ValidationMessageFor(
+                    x => x.BrojClanovaPorodice,
+                    "",
+                    new { @class = "text-danger" })
+            </div>
+
+            <div class="student-akcije">
+                <button type="submit" class="dugme dugme-success">
+                    Sačuvaj izmene
+                </button>
+
+                <a href="@Url.Action(
+                             "Index",
+                             "StudentDetalji",
+                             new { id = studentID })"
+                   class="dugme dugme-cancel">
+                    Otkaži
+                </a>
+            </div>
+        }
+    </div>
+</div>

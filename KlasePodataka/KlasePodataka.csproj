@@ -57,6 +57,7 @@
     <Compile Include="Mapiranja\PreliminarnaRangListaMapper.cs" />
     <Compile Include="Mapiranja\PrimedbaNaRangListuMapper.cs" />
     <Compile Include="Mapiranja\StudentDokumentacijaMapper.cs" />
+    <Compile Include="Mapiranja\StudentDokumentMapper.cs" />
     <Compile Include="Mapiranja\StudentMapper.cs" />
     <Compile Include="PreliminarnaRangListaKlasa.cs" />
     <Compile Include="PrimedbaNaRangListuKlasa.cs" />
@@ -65,10 +66,14 @@
     <Compile Include="SPPreliminarnaRangListaDBKlasa.cs" />
     <Compile Include="SPPrimedbaNaRangListuDBKlasa.cs" />
     <Compile Include="SPStudentDokumentacijaDBKlasa.cs" />
+    <Compile Include="SPStudentDokumentDBKlasa.cs" />
+    <Compile Include="StudentDetaljiKlasa.cs" />
     <Compile Include="StudentDokumentacijaKlasa.cs" />
+    <Compile Include="StudentDokumentKlasa.cs" />
     <Compile Include="StudentKlasa.cs" />
     <Compile Include="SPStudentDBKlasa.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StudentTabelaKlasa.cs" />
     <Compile Include="TipKorisnika.cs" />
   </ItemGroup>
   <ItemGroup>

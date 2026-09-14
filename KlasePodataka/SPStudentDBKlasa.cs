@@ -174,7 +174,146 @@ namespace KlasePodataka
                     rezultat);
             }
         }
-    
-        
+
+        public StudentKlasa DajStudentaPoID(int studentID)
+        {
+            if (studentID <= 0)
+            {
+                throw new ArgumentException(
+                    "Neispravan ID studenta.",
+                    nameof(studentID));
+            }
+
+            using (var konekcija =
+                new SqlConnection(_stringKonekcije))
+            using (var komanda =
+                new SqlCommand(
+                    "dbo.DajStudentaPoID",
+                    konekcija))
+            {
+                komanda.CommandType = CommandType.StoredProcedure;
+
+                komanda.Parameters.Add(
+                    "@StudentID",
+                    SqlDbType.Int).Value = studentID;
+
+                konekcija.Open();
+
+                using (SqlDataReader reader = komanda.ExecuteReader())
+                {
+                    if (!reader.Read())
+                    {
+                        return null;
+                    }
+
+                    return StudentMapper.Mapiraj(reader);
+                }
+            }
+        }
+
+        public void IzmeniStudenta(StudentKlasa student)
+        {
+            if (student == null)
+            {
+                throw new ArgumentNullException(nameof(student));
+            }
+
+            if (student.ID <= 0)
+            {
+                throw new ArgumentException(
+                    "Neispravan ID studenta.");
+            }
+
+            using (var konekcija =
+                new SqlConnection(_stringKonekcije))
+            using (var komanda =
+                new SqlCommand("dbo.IzmeniStudenta", konekcija))
+            {
+                komanda.CommandType = CommandType.StoredProcedure;
+
+                komanda.Parameters.Add(
+                    "@StudentID", SqlDbType.Int).Value = student.ID;
+
+                komanda.Parameters.Add(
+                    "@Ime", SqlDbType.NVarChar, 100).Value =
+                        (object)student.Ime ?? DBNull.Value;
+
+                komanda.Parameters.Add(
+                    "@Prezime", SqlDbType.NVarChar, 100).Value =
+                        (object)student.Prezime ?? DBNull.Value;
+
+                komanda.Parameters.Add(
+                    "@DatumRodjenja", SqlDbType.Date).Value =
+                        student.DatumRodjenja;
+
+                komanda.Parameters.Add(
+                    "@Email", SqlDbType.NVarChar, 255).Value =
+                        (object)student.Email ?? DBNull.Value;
+
+                komanda.Parameters.Add(
+                    "@Telefon", SqlDbType.NVarChar, 30).Value =
+                        (object)student.Telefon ?? DBNull.Value;
+
+                komanda.Parameters.Add(
+                    "@BrojIndeksa", SqlDbType.NVarChar, 50).Value =
+                        (object)student.BrojIndeksa ?? DBNull.Value;
+
+                komanda.Parameters.Add(
+                    "@StudijskiProgram", SqlDbType.NVarChar, 150).Value =
+                        (object)student.StudijskiProgram ?? DBNull.Value;
+
+                komanda.Parameters.Add(
+                    "@GodinaStudija", SqlDbType.NVarChar, 50).Value =
+                        (object)student.GodinaStudija ?? DBNull.Value;
+
+                komanda.Parameters.Add(
+                    "@BezRoditelja", SqlDbType.Bit).Value =
+                        student.BezRoditelja;
+
+                var prosek = komanda.Parameters.Add(
+                    "@Prosek", SqlDbType.Decimal);
+
+                prosek.Precision = 5;
+                prosek.Scale = 2;
+                prosek.Value = student.Prosek;
+
+                var primanja = komanda.Parameters.Add(
+                    "@UkupnaPrimanjaDomacinstva", SqlDbType.Decimal);
+
+                primanja.Precision = 15;
+                primanja.Scale = 2;
+                primanja.Value = student.UkupnaPrimanjaDomacinstva;
+
+                komanda.Parameters.Add(
+                    "@BrojClanovaPorodice", SqlDbType.Int).Value =
+                        student.BrojClanovaPorodice;
+
+                konekcija.Open();
+                komanda.ExecuteNonQuery();
+            }
+        }
+
+        public void ObrisiStudenta(int studentID)
+        {
+            if (studentID <= 0)
+            {
+                throw new ArgumentException(
+                    "Neispravan ID studenta.");
+            }
+
+            using (var konekcija =
+                new SqlConnection(_stringKonekcije))
+            using (var komanda =
+                new SqlCommand("dbo.ObrisiStudenta", konekcija))
+            {
+                komanda.CommandType = CommandType.StoredProcedure;
+
+                komanda.Parameters.Add(
+                    "@StudentID", SqlDbType.Int).Value = studentID;
+
+                konekcija.Open();
+                komanda.ExecuteNonQuery();
+            }
+        }
     }
 }

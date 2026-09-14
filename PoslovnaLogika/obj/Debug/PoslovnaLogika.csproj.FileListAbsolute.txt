@@ -56,3 +56,5 @@ C:\Users\bvkib\source\repos\EvidencijaStudenata\PoslovnaLogika\obj\Debug\Poslovn
 C:\Users\bvkib\source\repos\EvidencijaStudenata\PoslovnaLogika\bin\Debug\KlasePodataka.dll.config
 C:\Users\bvkib\source\repos\EvidencijaStudenata\PoslovnaLogika\bin\Debug\EntityFramework.dll
 C:\Users\bvkib\source\repos\EvidencijaStudenata\PoslovnaLogika\bin\Debug\EntityFramework.xml
+C:\Users\bvkib\source\repos\EvidencijaStudenata\PoslovnaLogika\bin\Debug\DBUtils.dll
+C:\Users\bvkib\source\repos\EvidencijaStudenata\PoslovnaLogika\bin\Debug\DBUtils.pdb

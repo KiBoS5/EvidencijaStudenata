@@ -58,3 +58,5 @@ C:\Users\bvkib\source\repos\EvidencijaStudenata\PrezentacionaLogika\obj\Debug\Pr
 C:\Users\bvkib\source\repos\EvidencijaStudenata\PrezentacionaLogika\bin\Debug\KlasePodataka.dll.config
 C:\Users\bvkib\source\repos\EvidencijaStudenata\PrezentacionaLogika\bin\Debug\EntityFramework.dll
 C:\Users\bvkib\source\repos\EvidencijaStudenata\PrezentacionaLogika\bin\Debug\EntityFramework.xml
+C:\Users\bvkib\source\repos\EvidencijaStudenata\PrezentacionaLogika\bin\Debug\DBUtils.dll
+C:\Users\bvkib\source\repos\EvidencijaStudenata\PrezentacionaLogika\bin\Debug\DBUtils.pdb

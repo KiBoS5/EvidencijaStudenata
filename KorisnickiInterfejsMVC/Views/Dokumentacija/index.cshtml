@@ -1,7 +1,7 @@
 ﻿@model List<KorisnickiInterfejsMVC.Models.StudentDokumentacijaVM>
 
 @{
-    ViewBag.Title = "Provera dokumentacije";
+    ViewBag.Title = "Pregled dokumentacije";
     Layout = "~/Views/Shared/_Layout.cshtml";
 
     bool jeZaposleni =
@@ -14,95 +14,17 @@
 }
 
 <style>
-    #formaProvere {
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        box-sizing: border-box;
-        width: calc(100% - 32px);
-        max-width: 520px;
-        max-height: calc(100vh - 32px);
-        overflow-y: auto;
-        padding: 28px;
-        border: 1px solid #d8e0e8;
-        border-radius: 16px;
-        background: #fff;
-        box-shadow: 0 16px 48px rgba(0, 0, 0, 0.25);
-        z-index: 1000;
-    }
-
-    #pozadina {
-        position: fixed;
-        inset: 0;
-        background: rgba(15, 23, 42, 0.5);
-        z-index: 999;
-    }
-
-    #formaProvere h2 {
-        margin: 0 0 24px;
-        color: #1e3a5f;
-        font-size: 24px;
-    }
-
-    #formaProvere .polje-grupa {
-        margin-bottom: 20px;
-    }
-
-    #formaProvere .radio-lista {
-        display: flex;
-        flex-direction: column;
-        gap: 12px;
-        margin-top: 12px;
-    }
-
-    #formaProvere .radio-opcija {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        margin: 0;
-        cursor: pointer;
-    }
-
-    #formaProvere input[type="radio"] {
-        width: 18px;
-        height: 18px;
-        margin: 0;
-        accent-color: #1e3a5f;
-    }
-
-    #formaProvere textarea {
-        box-sizing: border-box;
-        width: 100%;
-        margin-top: 8px;
-        resize: vertical;
-    }
-
-    #formaProvere .modal-akcije {
-        display: flex;
-        justify-content: flex-end;
-        flex-wrap: wrap;
-        gap: 12px;
-        margin-top: 24px;
-    }
-
-        #formaProvere .modal-akcije .dugme {
-            margin: 0;
-        }
-
-    #formaProvere .poruka-greske {
-        margin-top: 8px;
-        color: #b13a3a;
-        font-size: 13px;
-    }
-
     .dokumentacija-tabela-omotac {
         width: 100%;
         overflow-x: auto;
     }
 
         .dokumentacija-tabela-omotac .tabela {
-            min-width: 1050px;
+            min-width: 1100px;
+        }
+
+        .dokumentacija-tabela-omotac td {
+            vertical-align: top;
         }
 
     .dokumentacija-napomena {
@@ -111,6 +33,23 @@
         white-space: pre-wrap;
         overflow-wrap: anywhere;
     }
+
+    .dokumentacija-student-link {
+        color: #1e3a5f;
+        text-decoration: underline;
+        text-underline-offset: 3px;
+    }
+
+    .dokumentacija-datum {
+        white-space: nowrap;
+    }
+
+    .dokumentacija-objasnjenje {
+        margin-top: 16px;
+        color: #64748b;
+        font-size: 13px;
+        line-height: 1.6;
+    }
 </style>
 
 <div class="okvir">
@@ -118,19 +57,20 @@
 
         <div class="stranica-zaglavlje">
             <h1 class="print-naslov">
-                Provera dokumentacije
+                Pregled dokumentacije
             </h1>
 
             <p class="stranica-opis">
-                Pregled statusa dokumentacije prijavljenih studenata.
+                Pregled zbirnog statusa dokumentacije.
+                Kliknite na ime studenta za prikaz pojedinačnih dokumenata.
             </p>
         </div>
 
         @if (jeAdministrator)
         {
             <div class="alert alert-info">
-                Ovo je administratorski pregled. Dokumentaciju
-                mogu obrađivati samo zaposleni.
+                Ovo je administratorski pregled.
+                Dokumentaciju obrađuju zaposleni.
             </div>
         }
 
@@ -154,8 +94,8 @@
                         <th scope="col">Status</th>
                         <th scope="col">Datum podnošenja</th>
                         <th scope="col">Rezultat provere</th>
-                        <th scope="col">Proverio</th>
-                        <th scope="col">Datum provere</th>
+                        <th scope="col">Poslednji proverio</th>
+                        <th scope="col">Datum poslednje provere</th>
                         <th scope="col">Napomena</th>
 
                         @if (jeZaposleni)
@@ -172,9 +112,15 @@
                         {
                             <tr>
                                 <td>
-                                    <strong>
-                                        @doc.StudentIme @doc.StudentPrezime
-                                    </strong>
+                                    <a href="@Url.Action(
+                                                 "Index",
+                                                 "StudentDetalji",
+                                                 new { id = doc.StudentID })"
+                                       class="dokumentacija-student-link">
+                                        <strong>
+                                            @doc.StudentIme @doc.StudentPrezime
+                                        </strong>
+                                    </a>
                                 </td>
 
                                 <td>@doc.BrojIndeksa</td>
@@ -185,7 +131,7 @@
                                     </span>
                                 </td>
 
-                                <td>
+                                <td class="dokumentacija-datum">
                                     @(doc.DatumPodnosenja.HasValue
                                         ? doc.DatumPodnosenja.Value
                                             .ToString("dd.MM.yyyy HH:mm")
@@ -193,14 +139,14 @@
                                 </td>
 
                                 <td>
-                                    @if (!doc.SviDokumentiProvereni ||
-                                         !doc.DokumentacijaIspravna.HasValue)
+                                    @if (doc.DokumentacijaIspravna == false)
                                     {
-                                        <span class="badge badge-secondary">
-                                            Nije proverena
+                                        <span class="badge badge-danger">
+                                            Postoje neispravni dokumenti
                                         </span>
                                     }
-                                    else if (doc.DokumentacijaIspravna.Value)
+                                    else if (doc.SviDokumentiProvereni &&
+                                             doc.DokumentacijaIspravna == true)
                                     {
                                         <span class="badge badge-success">
                                             Ispravna
@@ -208,8 +154,8 @@
                                     }
                                     else
                                     {
-                                        <span class="badge badge-danger">
-                                            Nije ispravna
+                                        <span class="badge badge-secondary">
+                                            Provera nije završena
                                         </span>
                                     }
                                 </td>
@@ -235,7 +181,7 @@
                                     }
                                 </td>
 
-                                <td>
+                                <td class="dokumentacija-datum">
                                     @(doc.DatumProvere.HasValue
                                         ? doc.DatumProvere.Value
                                             .ToString("dd.MM.yyyy HH:mm")
@@ -247,44 +193,13 @@
                                 @if (jeZaposleni)
                                 {
                                     <td>
-                                        @if (!doc.SviDokumentiPodneseni)
-                                        {
-                                            using (Html.BeginForm(
-                                                "OznaciDokumentacijuPodnetom",
-                                                "Dokumentacija",
-                                                FormMethod.Post))
-                                            {
-                                                @Html.AntiForgeryToken()
-
-                                                @Html.Hidden(
-                                                    "studentID",
-                                                    doc.StudentID,
-                                                    new
-                                                    {
-                                                        id = "podnosenjeStudentID_" + doc.StudentID
-                                                    })
-
-                                                <button type="submit"
-                                                        class="dugme dugme-small">
-                                                    Označi kao podneto
-                                                </button>
-                                            }
-                                        }
-                                        else if (!doc.SviDokumentiProvereni ||
-                                                 doc.DokumentacijaIspravna == false)
-                                        {
-                                            <button type="button"
-                                                    class="dugme dugme-small"
-                                                    onclick="pokaziFormuProvere(@doc.StudentID, this)">
-                                                @(doc.DokumentacijaIspravna == false
-                                                    ? "Ponovo proveri"
-                                                    : "Proveri")
-                                            </button>
-                                        }
-                                        else
-                                        {
-                                            <span>-</span>
-                                        }
+                                        <a href="@Url.Action(
+                                                     "Index",
+                                                     "StudentDetalji",
+                                                     new { id = doc.StudentID })"
+                                           class="dugme dugme-small">
+                                            Obradi dokumente
+                                        </a>
                                     </td>
                                 }
                             </tr>
@@ -302,239 +217,15 @@
                 </tbody>
             </table>
         </div>
+
+        <p class="dokumentacija-objasnjenje">
+            Za prijave sa pojedinačnim dokumentima zbirni status
+            odnosi se na obavezne dokumente. Poslednji proverio
+            označava zaposlenog koji je poslednji proverio jedan
+            od njih. Podaci o svakoj proveri dostupni su u detaljima prijave.
+        </p>
     </div>
 </div>
-
-@if (jeZaposleni)
-{
-    <div id="pozadina"
-         style="display:none;"
-         onclick="sakrijFormuProvere()">
-    </div>
-
-    <div id="formaProvere"
-         style="display:none;"
-         role="dialog"
-         aria-modal="true"
-         aria-labelledby="naslovFormeProvere"
-         tabindex="-1">
-
-        <h2 id="naslovFormeProvere">
-            Provera dokumentacije
-        </h2>
-
-        @using (Html.BeginForm(
-            "ProveriDokumentacijuStudenta",
-            "Dokumentacija",
-            FormMethod.Post,
-            new
-            {
-                id = "formaZaProveru",
-                onsubmit = "return validirajProveru();"
-            }))
-        {
-            @Html.AntiForgeryToken()
-
-            @Html.Hidden(
-                "studentID",
-                0,
-                new { id = "modalStudentID" })
-
-            <div class="polje-grupa">
-                <strong>Da li je dokumentacija ispravna?</strong>
-
-                <div class="radio-lista">
-                    <label class="radio-opcija">
-                        <input type="radio"
-                               name="dokumentacijaIspravna"
-                               value="true"
-                               onchange="promeniObaveznostNapomene()" />
-                        Ispravna
-                    </label>
-
-                    <label class="radio-opcija">
-                        <input type="radio"
-                               name="dokumentacijaIspravna"
-                               value="false"
-                               onchange="promeniObaveznostNapomene()" />
-                        Nije ispravna
-                    </label>
-                </div>
-
-                <div id="porukaRezultat"
-                     class="poruka-greske"
-                     role="alert"
-                     style="display:none;">
-                    Izaberite rezultat provere.
-                </div>
-            </div>
-
-            <div class="polje-grupa">
-                <label for="napomena">Napomena</label>
-
-                <textarea id="napomena"
-                          name="napomena"
-                          class="polje-unos"
-                          rows="4"
-                          maxlength="500"
-                          aria-describedby="uputstvoNapomena"
-                          placeholder="Unesite napomenu o proveri..."></textarea>
-
-                <small id="uputstvoNapomena">
-                    Obavezna kada dokumentacija nije ispravna.
-                </small>
-
-                <div id="porukaNapomena"
-                     class="poruka-greske"
-                     role="alert"
-                     style="display:none;">
-                    Unesite razlog zbog kog dokumentacija nije ispravna.
-                </div>
-            </div>
-
-            <div class="modal-akcije">
-                <button type="button"
-                        class="dugme dugme-cancel"
-                        onclick="sakrijFormuProvere()">
-                    Otkaži
-                </button>
-
-                <button type="submit"
-                        class="dugme dugme-success">
-                    Sačuvaj proveru
-                </button>
-            </div>
-        }
-    </div>
-}
-
-@section Scripts {
-    <script>
-        var dugmeOtvaranjaProvere = null;
-        var prethodniOverflow = "";
-
-        function pokaziFormuProvere(studentId, dugme) {
-            var forma = document.getElementById("formaZaProveru");
-            if (!forma) {
-                return;
-            }
-
-            forma.reset();
-
-            document.getElementById("modalStudentID").value = studentId;
-            document.getElementById("porukaRezultat").style.display = "none";
-            document.getElementById("porukaNapomena").style.display = "none";
-
-            dugmeOtvaranjaProvere = dugme || document.activeElement;
-            prethodniOverflow = document.body.style.overflow;
-            document.body.style.overflow = "hidden";
-
-            document.getElementById("pozadina").style.display = "block";
-            document.getElementById("formaProvere").style.display = "block";
-
-            forma.querySelector(
-                'input[name="dokumentacijaIspravna"]'
-            ).focus();
-        }
-
-        function sakrijFormuProvere() {
-            var prozor = document.getElementById("formaProvere");
-            var pozadina = document.getElementById("pozadina");
-
-            if (!prozor || prozor.style.display === "none") {
-                return;
-            }
-
-            prozor.style.display = "none";
-
-            if (pozadina) {
-                pozadina.style.display = "none";
-            }
-
-            document.body.style.overflow = prethodniOverflow;
-
-            if (dugmeOtvaranjaProvere) {
-                dugmeOtvaranjaProvere.focus();
-            }
-        }
-
-        function pronadjiIzabraniRezultat() {
-            var izabrano = document.querySelector(
-                '#formaZaProveru input[name="dokumentacijaIspravna"]:checked'
-            );
-
-            return izabrano ? izabrano.value : null;
-        }
-
-        function promeniObaveznostNapomene() {
-            var rezultat = pronadjiIzabraniRezultat();
-
-            document.getElementById("porukaRezultat").style.display = "none";
-
-            if (rezultat === "true") {
-                document.getElementById("porukaNapomena").style.display = "none";
-            }
-        }
-
-        function validirajProveru() {
-            var rezultat = pronadjiIzabraniRezultat();
-            var napomena = document.getElementById("napomena");
-
-            document.getElementById("porukaRezultat").style.display = "none";
-            document.getElementById("porukaNapomena").style.display = "none";
-
-            if (rezultat === null) {
-                document.getElementById("porukaRezultat").style.display = "block";
-
-                document.querySelector(
-                    '#formaZaProveru input[name="dokumentacijaIspravna"]'
-                ).focus();
-
-                return false;
-            }
-
-            if (rezultat === "false" && napomena.value.trim().length === 0) {
-                document.getElementById("porukaNapomena").style.display = "block";
-                napomena.focus();
-                return false;
-            }
-
-            return true;
-        }
-
-        document.addEventListener("keydown", function (event) {
-            var prozor = document.getElementById("formaProvere");
-
-            if (!prozor || prozor.style.display === "none") {
-                return;
-            }
-
-            if (event.key === "Escape") {
-                event.preventDefault();
-                sakrijFormuProvere();
-                return;
-            }
-
-            if (event.key === "Tab") {
-                var elementi = prozor.querySelectorAll(
-                    'button:not([disabled]), input:not([type="hidden"]):not([disabled]), textarea:not([disabled])'
-                );
-
-                var prvi = elementi[0];
-                var poslednji = elementi[elementi.length - 1];
-
-                if (event.shiftKey && document.activeElement === prvi) {
-                    event.preventDefault();
-                    poslednji.focus();
-                } else if (!event.shiftKey &&
-                    document.activeElement === poslednji) {
-                    event.preventDefault();
-                    prvi.focus();
-                }
-            }
-        });
-    </script>
-}
 
 @functions {
     public string GetBadgeClass(string stanje)

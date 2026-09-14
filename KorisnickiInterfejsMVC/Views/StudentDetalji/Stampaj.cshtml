@@ -1,0 +1,405 @@
+﻿@model KorisnickiInterfejsMVC.Models.StudentDetaljiVM
+@using System.Globalization
+
+@{
+    Layout = null;
+
+    var kultura = CultureInfo.GetCultureInfo("sr-Latn-RS");
+
+    bool imaDokumenata =
+        Model.Dokumenti != null &&
+        Model.Dokumenti.Count > 0;
+}
+
+<!DOCTYPE html>
+<html lang="sr-Latn">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1" />
+
+    <title>Prijava @Model.StudentID – Stipendije</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 24px;
+            background: #eef2f6;
+            color: #172b43;
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .alatke {
+            max-width: 1000px;
+            margin: 0 auto 18px;
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .dugme {
+            display: inline-block;
+            padding: 10px 18px;
+            border: 1px solid #244365;
+            border-radius: 6px;
+            background: #244365;
+            color: white;
+            font: inherit;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .dugme-sekundarno {
+            background: white;
+            color: #244365;
+        }
+
+        .dokument {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 36px;
+            background: white;
+            border: 1px solid #d6dfe8;
+        }
+
+        .zaglavlje {
+            padding-bottom: 18px;
+            margin-bottom: 24px;
+            border-bottom: 2px solid #244365;
+        }
+
+        .oznaka {
+            margin: 0;
+            font-size: 12px;
+            letter-spacing: 1px;
+        }
+
+        h1 {
+            margin: 8px 0;
+            font-size: 26px;
+        }
+
+        h2 {
+            margin: 24px 0 12px;
+            font-size: 18px;
+        }
+
+        .meta {
+            margin: 4px 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            table-layout: fixed;
+        }
+
+        th,
+        td {
+            border: 1px solid #bac7d4;
+            padding: 8px;
+            text-align: left;
+            vertical-align: top;
+            overflow-wrap: anywhere;
+        }
+
+        th {
+            background: #edf2f7;
+            font-weight: bold;
+        }
+
+        .podaci th {
+            width: 35%;
+        }
+
+        .dokumenti {
+            font-size: 12px;
+        }
+
+            .dokumenti th:nth-child(1) {
+                width: 24%;
+            }
+
+            .dokumenti th:nth-child(2) {
+                width: 12%;
+            }
+
+            .dokumenti th:nth-child(3) {
+                width: 19%;
+            }
+
+            .dokumenti th:nth-child(4) {
+                width: 23%;
+            }
+
+            .dokumenti th:nth-child(5) {
+                width: 22%;
+            }
+
+        .sitno {
+            display: block;
+            margin-top: 4px;
+            font-size: 11px;
+        }
+
+        .napomena {
+            white-space: pre-wrap;
+        }
+
+        .futer {
+            margin-top: 24px;
+            padding-top: 12px;
+            border-top: 1px solid #bac7d4;
+            font-size: 11px;
+        }
+
+        @@page {
+            size: A4 portrait;
+            margin: 15mm;
+        }
+
+        @@media print {
+            body {
+                margin: 0;
+                padding: 0;
+                background: white;
+                color: black;
+                font-size: 10pt;
+            }
+
+            .bez-stampe {
+                display: none !important;
+            }
+
+            .dokument {
+                max-width: none;
+                margin: 0;
+                padding: 0;
+                border: none;
+            }
+
+            h1 {
+                font-size: 19pt;
+            }
+
+            h2 {
+                font-size: 13pt;
+                break-after: avoid;
+                page-break-after: avoid;
+            }
+
+            thead {
+                display: table-header-group;
+            }
+
+            tr {
+                break-inside: avoid;
+                page-break-inside: avoid;
+            }
+
+            .dokumenti {
+                font-size: 9pt;
+            }
+
+            th,
+            td {
+                padding: 6px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="alatke bez-stampe"
+         aria-label="Akcije za štampu">
+
+        <button type="button"
+                class="dugme"
+                onclick="window.print()">
+            Štampaj prijavu
+        </button>
+
+        <a href="@Url.Action(
+                     "Index",
+                     "StudentDetalji",
+                     new { id = Model.StudentID })"
+           class="dugme dugme-sekundarno">
+            Nazad na detalje
+        </a>
+    </nav>
+
+    <main class="dokument">
+        <header class="zaglavlje">
+            <p class="oznaka">
+                KOMISIJA ZA DODELU STUDENTSKIH STIPENDIJA
+            </p>
+
+            <h1>Prijava za studentsku stipendiju</h1>
+
+            <p class="meta">
+                ID prijave:
+                <strong>@Model.StudentID</strong>
+            </p>
+
+            <p class="meta">
+                Student:
+                <strong>@Model.Ime @Model.Prezime</strong>
+            </p>
+
+            <p class="meta">
+                Broj indeksa:
+                <strong>@Model.BrojIndeksa</strong>
+            </p>
+        </header>
+
+        <section>
+            <h2>Podaci o studentu</h2>
+
+            <table class="podaci">
+                <tbody>
+                    <tr>
+                        <th scope="row">Ime i prezime</th>
+                        <td>@Model.Ime @Model.Prezime</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Datum rođenja</th>
+                        <td>
+                            @(Model.DatumRodjenja.ToString("dd.MM.yyyy"))
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Email</th>
+                        <td>@Model.Email</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Telefon</th>
+                        <td>@Model.Telefon</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Broj indeksa</th>
+                        <td>@Model.BrojIndeksa</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Studijski program</th>
+                        <td>@Model.StudijskiProgram</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Godina studija</th>
+                        <td>@Model.GodinaStudija</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Prosek ocena</th>
+                        <td>
+                            @(Model.Prosek.ToString("0.00", kultura))
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Bez roditelja</th>
+                        <td>@(Model.BezRoditelja ? "Da" : "Ne")</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Ukupna primanja domaćinstva</th>
+                        <td>
+                            @(Model.UkupnaPrimanjaDomacinstva
+                                .ToString("N2", kultura))
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Broj članova porodice</th>
+                        <td>@Model.BrojClanovaPorodice</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section>
+            <h2>Dokumenti prijave</h2>
+
+            @if (imaDokumenata)
+            {
+                <table class="dokumenti">
+                    <thead>
+                        <tr>
+                            <th scope="col">Dokument</th>
+                            <th scope="col">Obavezan</th>
+                            <th scope="col">Podnošenje</th>
+                            <th scope="col">Provera</th>
+                            <th scope="col">Napomena</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var dokument in Model.Dokumenti)
+                        {
+                            <tr>
+                                <td>@dokument.NazivDokumenta</td>
+
+                                <td>
+                                    @(dokument.Obavezan ? "Da" : "Ne")
+                                </td>
+
+                                <td>
+                                    @(dokument.Podnet
+                                        ? "Podnet"
+                                        : "Nije podnet")
+
+                                    @if (dokument.DatumPodnosenja.HasValue)
+                                    {
+                                        <span class="sitno">
+                                            @(dokument.DatumPodnosenja.Value
+                                                .ToString("dd.MM.yyyy HH:mm"))
+                                        </span>
+                                    }
+                                </td>
+
+                                <td>
+                                    @(dokument.Ispravan.HasValue
+                                        ? (dokument.Ispravan.Value
+                                            ? "Ispravan"
+                                            : "Nije ispravan")
+                                        : "Nije proveren")
+
+                                    @if (dokument.DatumProvere.HasValue)
+                                    {
+                                        <span class="sitno">
+                                            @(dokument.DatumProvere.Value
+                                                .ToString("dd.MM.yyyy HH:mm"))
+                                        </span>
+                                    }
+
+                                    @if (!string.IsNullOrWhiteSpace(
+                                        dokument.ProverioImeIPrezime))
+                                    {
+                                        <span class="sitno">
+                                            Proverio:
+                                            @dokument.ProverioImeIPrezime
+                                        </span>
+                                    }
+                                </td>
+
+                                <td>
+                                    <div class="napomena">@(string.IsNullOrWhiteSpace(dokument.Napomena) ? "—" : dokument.Napomena)</div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+            else
+            {
+                <p>Za ovu prijavu nema evidentiranih dokumenata.</p>
+            }
+        </section>
+
+        <footer class="futer">
+            Prikaz sadrži trenutno evidentirane podatke prijave.
+            Datumi podnošenja i provere dokumenata prikazani su
+            u UTC vremenu.
+        </footer>
+    </main>
+</body>
+</html>

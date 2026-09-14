@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Configuration;
-using System.Data.SqlClient;
 using System.Linq;
 using System.Web.Mvc;
 using KlasePodataka;
@@ -26,218 +25,95 @@ namespace KorisnickiInterfejsMVC.Controllers
                 Session["TipKorisnika"] == null)
             {
                 filterContext.Result =
-                    RedirectToAction(
-                        "UlogujAdmin",
-                        "Nalog");
+                    RedirectToAction("UlogujAdmin", "Nalog");
 
                 return;
             }
 
-            byte tipKorisnika =
-                Convert.ToByte(
-                    Session["TipKorisnika"]);
+            byte tipKorisnika;
 
-            bool dozvoljenPristup =
-                tipKorisnika ==
-                    (byte)TipKorisnika.Administrator ||
-                tipKorisnika ==
-                    (byte)TipKorisnika.Zaposleni;
-
-            if (!dozvoljenPristup)
+            if (!byte.TryParse(
+                    Convert.ToString(Session["TipKorisnika"]),
+                    out tipKorisnika))
             {
                 filterContext.Result =
-                    RedirectToAction(
-                        "UlogujAdmin",
-                        "Nalog");
+                    new HttpStatusCodeResult(403);
+
+                return;
             }
+
+            bool jeAdministrator =
+                tipKorisnika == (byte)TipKorisnika.Administrator;
+
+            bool jeZaposleni =
+                tipKorisnika == (byte)TipKorisnika.Zaposleni;
+
+            if (!jeAdministrator && !jeZaposleni)
+            {
+                filterContext.Result =
+                    new HttpStatusCodeResult(403);
+
+                return;
+            }
+
+            ViewBag.JeAdministrator = jeAdministrator;
+            ViewBag.JeZaposleni = jeZaposleni;
         }
 
         [HttpGet]
         public ActionResult Index()
         {
-            StudentDokumentacijaServis servis =
-                KreirajServis();
+            var servis = KreirajServis();
 
             var model = servis
                 .DajDokumentacijuStudenata()
-                .Select(x =>
-                    new StudentDokumentacijaVM
-                    {
-                        DokumentacijaID = x.ID,
-                        StudentID = x.StudentID,
+                .Select(x => new StudentDokumentacijaVM
+                {
+                    DokumentacijaID = x.ID,
+                    StudentID = x.StudentID,
 
-                        StudentIme = x.StudentIme,
-                        StudentPrezime =
-                            x.StudentPrezime,
+                    StudentIme = x.StudentIme,
+                    StudentPrezime = x.StudentPrezime,
+                    BrojIndeksa = x.BrojIndeksa,
 
-                        BrojIndeksa = x.BrojIndeksa,
+                    SviDokumentiPodneseni =
+                        x.SviDokumentiPodneseni,
 
-                        SviDokumentiPodneseni =
-                            x.SviDokumentiPodneseni,
+                    DatumPodnosenja = x.DatumPodnosenja,
 
-                        DatumPodnosenja =
-                            x.DatumPodnosenja,
+                    SviDokumentiProvereni =
+                        x.SviDokumentiProvereni,
 
-                        SviDokumentiProvereni =
-                            x.SviDokumentiProvereni,
+                    DatumProvere = x.DatumProvere,
 
-                        DatumProvere =
-                            x.DatumProvere,
+                    DokumentacijaIspravna =
+                        x.DokumentacijaIspravna,
 
-                        DokumentacijaIspravna =
-                            x.DokumentacijaIspravna,
+                    NapomenaProvere = x.NapomenaProvere,
+                    SpremnaZaUnos = x.SpremnaZaUnos,
 
-                        NapomenaProvere =
-                            x.NapomenaProvere,
+                    ProverioKorisnikID =
+                        x.ProverioKorisnikID,
 
-                        SpremnaZaUnos =
-                            x.SpremnaZaUnos,
+                    ProverioImeIPrezime =
+                        x.ProverioImeIPrezime,
 
-                        ProverioKorisnikID =
-                            x.ProverioKorisnikID,
+                    ProverioKorisnickoIme =
+                        x.ProverioKorisnickoIme,
 
-                        ProverioImeIPrezime =
-                            x.ProverioImeIPrezime,
-
-                        ProverioKorisnickoIme =
-                            x.ProverioKorisnickoIme,
-
-                        StanjeProcesa =
-                            x.StanjeProcesa
-                    })
+                    StanjeProcesa = x.StanjeProcesa
+                })
                 .ToList();
-
-            ViewBag.JeZaposleni =
-                DaLiJeZaposleni();
-
-            ViewBag.JeAdministrator =
-                DaLiJeAdministrator();
 
             return View(model);
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult OznaciDokumentacijuPodnetom(
-            int studentID)
-        {
-            if (!DaLiJeZaposleni())
-            {
-                return ZabraniIzmenu();
-            }
-
-            return IzvrsiAkciju(
-                () => KreirajServis()
-                    .OznaciDokumentacijuPodnetom(
-                        studentID),
-
-                "Dokumentacija je označena kao podneta.");
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult ProveriDokumentacijuStudenta(
-            int studentID,
-            bool dokumentacijaIspravna,
-            string napomena)
-        {
-            if (!DaLiJeZaposleni())
-            {
-                return ZabraniIzmenu();
-            }
-
-            int prijavljeniKorisnikID =
-                Convert.ToInt32(
-                    Session["KorisnikID"]);
-
-            return IzvrsiAkciju(
-                () => KreirajServis()
-                    .ProveriDokumentacijuStudenta(
-                        studentID,
-                        dokumentacijaIspravna,
-                        napomena,
-                        prijavljeniKorisnikID),
-
-                dokumentacijaIspravna
-                    ? "Dokumentacija je proverena i ispravna."
-                    : "Dokumentacija je proverena, ali nije ispravna.");
-        }
-
-        private StudentDokumentacijaServis
-            KreirajServis()
+        private StudentDokumentacijaServis KreirajServis()
         {
             IStudentDokumentacijaRepository repo =
-                new StudentDokumentacijaRepositorySP(
-                    _konekcija);
+                new StudentDokumentacijaRepositorySP(_konekcija);
 
-            return new StudentDokumentacijaServis(
-                repo);
-        }
-
-        private bool DaLiJeZaposleni()
-        {
-            if (Session["TipKorisnika"] == null)
-            {
-                return false;
-            }
-
-            byte tipKorisnika =
-                Convert.ToByte(
-                    Session["TipKorisnika"]);
-
-            return tipKorisnika ==
-                (byte)TipKorisnika.Zaposleni;
-        }
-
-        private bool DaLiJeAdministrator()
-        {
-            if (Session["TipKorisnika"] == null)
-            {
-                return false;
-            }
-
-            byte tipKorisnika =
-                Convert.ToByte(
-                    Session["TipKorisnika"]);
-
-            return tipKorisnika ==
-                (byte)TipKorisnika.Administrator;
-        }
-
-        private ActionResult ZabraniIzmenu()
-        {
-            TempData["Poruka"] =
-                "Samo zaposleni može da obrađuje dokumentaciju.";
-
-            return RedirectToAction("Index");
-        }
-
-        private ActionResult IzvrsiAkciju(
-            Action akcija,
-            string poruka)
-        {
-            try
-            {
-                akcija();
-                TempData["Poruka"] = poruka;
-            }
-            catch (ArgumentException ex)
-            {
-                TempData["Poruka"] = ex.Message;
-            }
-            catch (SqlException ex)
-                when (ex.Number >= 50010 &&
-                      ex.Number <= 50014)
-            {
-                TempData["Poruka"] = ex.Message;
-            }
-            catch (Exception)
-            {
-                TempData["Poruka"] =
-                    "Dogodila se greška pri obradi dokumentacije.";
-            }
-
-            return RedirectToAction("Index");
+            return new StudentDokumentacijaServis(repo);
         }
     }
 }

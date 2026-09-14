@@ -56,12 +56,14 @@
     <Compile Include="IPrimedbaNaRangListuRepository.cs" />
     <Compile Include="ISkoringKonfiguracijaRepository.cs" />
     <Compile Include="IStudentDokumentacijaRepository.cs" />
+    <Compile Include="IStudentDokumentRepository.cs" />
     <Compile Include="IStudentRepository.cs" />
     <Compile Include="KorisnikRepositorySP.cs" />
     <Compile Include="PreliminarnaRangListaRepositorySP.cs" />
     <Compile Include="PrimedbaNaRangListuRepositorySP.cs" />
     <Compile Include="SkoringKonfiguracijaRepositoryEF.cs" />
     <Compile Include="StudentDokumentacijaRepositorySP.cs" />
+    <Compile Include="StudentDokumentRepositorySP.cs" />
     <Compile Include="StudentRepositorySP.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

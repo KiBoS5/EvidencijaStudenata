@@ -50,68 +50,6 @@ namespace DBUtils
             return _dataSetObjekat;
         }
 
-        public int DajBrojSlogova()
-        {
-            return _dataSetObjekat.Tables[0].Rows.Count;
-        }
-
-        public bool IzvrsiAzuriranje(string upit)
-        {
-            bool uspeh = false;
-            SqlTransaction transakcija = null;
-
-            try
-            {
-                SqlConnection konekcija = _konekcijaObjekat.DajKonekciju();
-                SqlCommand komanda = konekcija.CreateCommand();
-
-                transakcija = konekcija.BeginTransaction();
-                komanda.Transaction = transakcija;
-
-                komanda.CommandText = upit;
-                komanda.ExecuteNonQuery();
-
-                transakcija.Commit();
-                uspeh = true;
-            }
-            catch
-            {
-                transakcija?.Rollback();
-                uspeh = false;
-            }
-
-            return uspeh;
-        }
-
-        public bool IzvrsiAzuriranje(List<string> listaUpita)
-        {
-            bool uspeh = false;
-            SqlTransaction transakcija = null;
-
-            try
-            {
-                SqlConnection konekcija = _konekcijaObjekat.DajKonekciju();
-                SqlCommand komanda = konekcija.CreateCommand();
-
-                transakcija = konekcija.BeginTransaction();
-                komanda.Transaction = transakcija;
-
-                foreach (var upit in listaUpita)
-                {
-                    komanda.CommandText = upit;
-                    komanda.ExecuteNonQuery();
-                }
-
-                transakcija.Commit();
-                uspeh = true;
-            }
-            catch
-            {
-                transakcija?.Rollback();
-                uspeh = false;
-            }
-
-            return uspeh;
-        }
+        
     }
 }

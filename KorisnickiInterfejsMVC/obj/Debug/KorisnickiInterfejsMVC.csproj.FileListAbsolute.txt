@@ -280,3 +280,5 @@ C:\Users\bvkib\source\repos\EvidencijaStudenata\KorisnickiInterfejsMVC\bin\Entit
 C:\Users\bvkib\source\repos\EvidencijaStudenata\KorisnickiInterfejsMVC\bin\KlasePodataka.dll.config
 C:\Users\bvkib\source\repos\EvidencijaStudenata\KorisnickiInterfejsMVC\bin\EntityFramework.xml
 C:\Users\bvkib\source\repos\EvidencijaStudenata\KorisnickiInterfejsMVC\bin\EntityFramework.SqlServer.xml
+C:\Users\bvkib\source\repos\EvidencijaStudenata\KorisnickiInterfejsMVC\bin\DBUtils.dll
+C:\Users\bvkib\source\repos\EvidencijaStudenata\KorisnickiInterfejsMVC\bin\DBUtils.pdb

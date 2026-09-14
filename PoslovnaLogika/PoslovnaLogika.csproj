@@ -52,6 +52,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SkoringKonfiguracijaServis.cs" />
     <Compile Include="StudentDokumentacijaServis.cs" />
+    <Compile Include="StudentDokumentServis.cs" />
+    <Compile Include="StudentIzmenaServis.cs" />
     <Compile Include="StudentPrijavaServis.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -1342,7 +1342,7 @@ textarea.polje-unos {
             min-height: auto;
         }
     }
-
+}
     /* Prijava studenta */
 
     .studentska-prijava {
@@ -2660,4 +2660,193 @@ textarea.polje-unos {
             grid-template-columns: 1fr;
         }
     }
+
+    
+
+/* Master-detail prikaz prijave */
+
+.detalji-prijave {
+    min-width: 0;
+    padding: 32px;
 }
+
+.detalji-prijave-zaglavlje {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 24px;
+    margin-bottom: 32px;
+}
+
+.detalji-prijave h1 {
+    margin: 0 0 12px;
+    color: var(--primary);
+    font-size: 30px;
+}
+
+.detalji-prijave h2 {
+    margin: 0 0 20px;
+    color: var(--primary);
+    font-size: 22px;
+}
+
+.detalji-prijave-zaglavlje > .dugme {
+    flex-shrink: 0;
+}
+
+.student-podaci {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 24px;
+    margin: 0;
+    padding: 24px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    background: var(--surface-soft);
+}
+
+    .student-podaci dt {
+        margin-bottom: 6px;
+        color: var(--text-muted);
+        font-size: 13px;
+    }
+
+    .student-podaci dd {
+        margin: 0;
+        color: var(--text);
+        font-weight: 600;
+        overflow-wrap: anywhere;
+    }
+
+.student-dokumenti {
+    margin-top: 36px;
+}
+
+.detalji-tabela-omotac {
+    overflow-x: auto;
+    width: 100%;
+    margin-top: 20px;
+}
+
+    .detalji-tabela-omotac .tabela {
+        min-width: 1000px;
+    }
+
+.detalji-napomena {
+    min-width: 150px;
+    max-width: 300px;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+}
+
+.detalji-vreme {
+    margin-top: 12px;
+    color: var(--text-muted);
+    font-size: 12px;
+}
+
+@media (max-width: 900px) {
+    .student-podaci {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .detalji-prijave-zaglavlje {
+        flex-direction: column;
+    }
+}
+
+@media (max-width: 600px) {
+    .detalji-prijave {
+        padding: 24px 16px;
+    }
+
+    .student-podaci {
+        grid-template-columns: 1fr;
+        padding: 18px;
+    }
+}
+
+.dokument-akcije {
+    min-width: 240px;
+    vertical-align: top;
+}
+
+    .dokument-akcije form {
+        margin: 0;
+    }
+
+.dokument-provera summary {
+    color: var(--primary);
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.dokument-provera[open] summary {
+    margin-bottom: 16px;
+}
+
+.dokument-provera form {
+    padding: 16px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--surface-soft);
+}
+
+.dokument-rezultat {
+    min-width: 0;
+    margin: 0 0 16px;
+    padding: 0;
+    border: 0;
+}
+
+    .dokument-rezultat legend {
+        float: none;
+        width: auto;
+        margin-bottom: 10px;
+        border: 0;
+        font-size: 14px;
+        font-weight: 600;
+    }
+
+    .dokument-rezultat label {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 8px;
+    }
+
+.dokument-provera textarea {
+    margin: 8px 0 12px;
+    resize: vertical;
+}
+
+.dokument-akcije .dugme {
+    white-space: normal;
+}
+
+.forma-izmena-studenta {
+    max-width: 720px;
+}
+
+.student-akcije {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin: 20px 0;
+}
+
+.student-brisanje {
+    margin: 0;
+}
+
+.student-dugme-obrisi {
+    background: #b42318;
+    border: 1px solid #b42318;
+    color: #fff;
+}
+
+    .student-dugme-obrisi:hover {
+        background: #912018;
+        border-color: #912018;
+    }
