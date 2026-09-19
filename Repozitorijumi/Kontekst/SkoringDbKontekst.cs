@@ -1,13 +1,13 @@
 ﻿using System.Data.Entity;
+using KlasePodataka;
 
-namespace KlasePodataka.Kontekst
+namespace Repozitorijumi.Kontekst
 {
     public class SkoringDbKontekst : DbContext
     {
         static SkoringDbKontekst()
         {
-            // Koristimo postojeću bazu.
-            // EF ne kreira, ne briše i ne menja njenu strukturu.
+            
             Database.SetInitializer<SkoringDbKontekst>(null);
         }
 

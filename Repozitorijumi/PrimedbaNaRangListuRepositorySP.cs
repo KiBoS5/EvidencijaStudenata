@@ -1,10 +1,13 @@
-﻿using System.Collections.Generic;
-using KlasePodataka;
+﻿using KlasePodataka;
+using Repozitorijumi.Mapiranja;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
 
 namespace Repozitorijumi
 {
-    public class PrimedbaNaRangListuRepositorySP
-        : IPrimedbaNaRangListuRepository
+    public class PrimedbaNaRangListuRepositorySP : IPrimedbaNaRangListuRepository
     {
         private readonly string _stringKonekcije;
 
@@ -17,35 +20,104 @@ namespace Repozitorijumi
         public void Dodaj(
             PrimedbaNaRangListuKlasa primedba)
         {
-            SPPrimedbaNaRangListuDBKlasa db =
-                new SPPrimedbaNaRangListuDBKlasa(
-                    _stringKonekcije);
+            using (SqlConnection konekcija =
+                new SqlConnection(_stringKonekcije))
+            using (SqlCommand komanda =
+                new SqlCommand(
+                    "dbo.DodajPrimedbuNaRangListu",
+                    konekcija))
+            {
+                komanda.CommandType =
+                    CommandType.StoredProcedure;
 
-            db.DodajPrimedbu(
-                primedba);
+                komanda.Parameters.Add(
+                    "@Ime",
+                    SqlDbType.NVarChar,
+                    100).Value =
+                        primedba.Ime;
+
+                komanda.Parameters.Add(
+                    "@Prezime",
+                    SqlDbType.NVarChar,
+                    100).Value =
+                        primedba.Prezime;
+
+                komanda.Parameters.Add(
+                    "@Email",
+                    SqlDbType.NVarChar,
+                    255).Value =
+                        primedba.Email;
+
+                komanda.Parameters.Add(
+                    "@Komentar",
+                    SqlDbType.NVarChar,
+                    2000).Value =
+                        primedba.Komentar;
+
+                konekcija.Open();
+                komanda.ExecuteNonQuery();
+            }
         }
 
         public List<PrimedbaNaRangListuKlasa>
             DajSve()
         {
-            SPPrimedbaNaRangListuDBKlasa db =
-                new SPPrimedbaNaRangListuDBKlasa(
-                    _stringKonekcije);
+            List<PrimedbaNaRangListuKlasa> lista =
+                new List<PrimedbaNaRangListuKlasa>();
 
-            return db.DajPrimedbe();
+            using (SqlConnection konekcija =
+                new SqlConnection(_stringKonekcije))
+            using (SqlCommand komanda =
+                new SqlCommand(
+                    "dbo.DajPrimedbeNaRangListu",
+                    konekcija))
+            {
+                komanda.CommandType =
+                    CommandType.StoredProcedure;
+
+                konekcija.Open();
+
+                using (SqlDataReader reader =
+                    komanda.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        lista.Add(PrimedbaNaRangListuMapper.Mapiraj(reader));
+                    }
+                }
+            }
+
+            return lista;
         }
 
         public void OznaciObradjenom(
             int primedbaID,
             int obradioKorisnikID)
         {
-            SPPrimedbaNaRangListuDBKlasa db =
-                new SPPrimedbaNaRangListuDBKlasa(
-                    _stringKonekcije);
+            using (SqlConnection konekcija =
+                new SqlConnection(_stringKonekcije))
+            using (SqlCommand komanda =
+                new SqlCommand(
+                    "dbo.OznaciPrimedbuObradjenom",
+                    konekcija))
+            {
+                komanda.CommandType =
+                    CommandType.StoredProcedure;
 
-            db.OznaciObradjenom(
-                primedbaID,
-                obradioKorisnikID);
+                komanda.Parameters.Add(
+                    "@PrimedbaID",
+                    SqlDbType.Int).Value =
+                        primedbaID;
+
+                komanda.Parameters.Add(
+                    "@ObradioKorisnikID",
+                    SqlDbType.Int).Value =
+                        obradioKorisnikID;
+
+                konekcija.Open();
+                komanda.ExecuteNonQuery();
+            }
         }
+
     }
 }

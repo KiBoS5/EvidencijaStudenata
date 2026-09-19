@@ -1,7 +1,8 @@
-﻿using System;
+﻿using KlasePodataka;
+using System;
 using System.Data.SqlClient;
 
-namespace KlasePodataka.Mapiranja
+namespace Repozitorijumi.Mapiranja
 {
     internal static class StudentDokumentacijaMapper
     {

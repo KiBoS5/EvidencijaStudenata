@@ -1,10 +1,13 @@
-﻿using System.Collections.Generic;
-using KlasePodataka;
+﻿using KlasePodataka;
+using Repozitorijumi.Mapiranja;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
 
 namespace Repozitorijumi
 {
-    public class StudentDokumentacijaRepositorySP
-        : IStudentDokumentacijaRepository
+    public class StudentDokumentacijaRepositorySP : IStudentDokumentacijaRepository
     {
         private readonly string _stringKonekcije;
 
@@ -17,21 +20,40 @@ namespace Repozitorijumi
         public List<StudentDokumentacijaKlasa>
             DajDokumentacijuStudenata()
         {
-            SPStudentDokumentacijaDBKlasa db =
-                new SPStudentDokumentacijaDBKlasa(
-                    _stringKonekcije);
+            List<StudentDokumentacijaKlasa> lista =
+                new List<StudentDokumentacijaKlasa>();
 
-            return db.DajDokumentacijuStudenata();
+            using (SqlConnection konekcija =
+                new SqlConnection(_stringKonekcije))
+            using (SqlCommand komanda =
+                new SqlCommand(
+                    "dbo.DajDokumentacijuStudenata",
+                    konekcija))
+            {
+                komanda.CommandType =
+                    CommandType.StoredProcedure;
+
+                konekcija.Open();
+
+                using (SqlDataReader reader =
+                    komanda.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        lista.Add(
+                                StudentDokumentacijaMapper.Mapiraj(reader));
+                    }
+                }
+            }
+
+            return lista;
         }
 
         public void OznaciDokumentacijuPodnetom(
             int studentID)
         {
-            SPStudentDokumentacijaDBKlasa db =
-                new SPStudentDokumentacijaDBKlasa(
-                    _stringKonekcije);
-
-            db.OznaciDokumentacijuPodnetom(
+            IzvrsiZaStudenta(
+                "dbo.OznaciDokumentacijuPodnetom",
                 studentID);
         }
 
@@ -41,15 +63,68 @@ namespace Repozitorijumi
             string napomena,
             int proverioKorisnikID)
         {
-            SPStudentDokumentacijaDBKlasa db =
-                new SPStudentDokumentacijaDBKlasa(
-                    _stringKonekcije);
+            using (SqlConnection konekcija =
+                new SqlConnection(_stringKonekcije))
+            using (SqlCommand komanda =
+                new SqlCommand(
+                    "dbo.ProveriDokumentacijuStudenta",
+                    konekcija))
+            {
+                komanda.CommandType =
+                    CommandType.StoredProcedure;
 
-            db.ProveriDokumentacijuStudenta(
-                studentID,
-                dokumentacijaIspravna,
-                napomena,
-                proverioKorisnikID);
+                komanda.Parameters.Add(
+                    "@StudentID",
+                    SqlDbType.Int).Value =
+                        studentID;
+
+                komanda.Parameters.Add(
+                    "@DokumentacijaIspravna",
+                    SqlDbType.Bit).Value =
+                        dokumentacijaIspravna;
+
+                komanda.Parameters.Add(
+                    "@Napomena",
+                    SqlDbType.NVarChar,
+                    500).Value =
+                        string.IsNullOrWhiteSpace(napomena)
+                            ? (object)DBNull.Value
+                            : napomena.Trim();
+
+                komanda.Parameters.Add(
+                    "@ProverioKorisnikID",
+                    SqlDbType.Int).Value =
+                        proverioKorisnikID;
+
+                konekcija.Open();
+                komanda.ExecuteNonQuery();
+            }
         }
+
+        private void IzvrsiZaStudenta(
+            string nazivProcedure,
+            int studentID)
+        {
+            using (SqlConnection konekcija =
+                new SqlConnection(_stringKonekcije))
+            using (SqlCommand komanda =
+                new SqlCommand(
+                    nazivProcedure,
+                    konekcija))
+            {
+                komanda.CommandType =
+                    CommandType.StoredProcedure;
+
+                komanda.Parameters.Add(
+                    "@StudentID",
+                    SqlDbType.Int).Value =
+                        studentID;
+
+                konekcija.Open();
+                komanda.ExecuteNonQuery();
+            }
+        }
+
+
     }
 }

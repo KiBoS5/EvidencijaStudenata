@@ -58,7 +58,14 @@
     <Compile Include="IStudentDokumentacijaRepository.cs" />
     <Compile Include="IStudentDokumentRepository.cs" />
     <Compile Include="IStudentRepository.cs" />
+    <Compile Include="Kontekst\SkoringDbKontekst.cs" />
     <Compile Include="KorisnikRepositorySP.cs" />
+    <Compile Include="Mapiranja\KorisnikMapper.cs" />
+    <Compile Include="Mapiranja\PreliminarnaRangListaMapper.cs" />
+    <Compile Include="Mapiranja\PrimedbaNaRangListuMapper.cs" />
+    <Compile Include="Mapiranja\StudentDokumentacijaMapper.cs" />
+    <Compile Include="Mapiranja\StudentDokumentMapper.cs" />
+    <Compile Include="Mapiranja\StudentMapper.cs" />
     <Compile Include="PreliminarnaRangListaRepositorySP.cs" />
     <Compile Include="PrimedbaNaRangListuRepositorySP.cs" />
     <Compile Include="SkoringKonfiguracijaRepositoryEF.cs" />
@@ -66,6 +73,7 @@
     <Compile Include="StudentDokumentRepositorySP.cs" />
     <Compile Include="StudentRepositorySP.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StudentTabelaKlasa.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DBUtils\DBUtils.csproj">

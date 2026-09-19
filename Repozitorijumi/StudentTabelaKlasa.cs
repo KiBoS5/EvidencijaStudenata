@@ -2,7 +2,7 @@
 using System.Data;
 using DBUtils;
 
-namespace KlasePodataka
+namespace Repozitorijumi
 {
     public class StudentTabelaKlasa : TabelaKlasa
     {
